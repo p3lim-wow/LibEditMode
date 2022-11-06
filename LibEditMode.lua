@@ -1,5 +1,5 @@
 local MAJOR = 'LibEditMode'
-local MINOR = 1
+local MINOR = 2
 
 local lib = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then
