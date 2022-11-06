@@ -35,7 +35,7 @@ local anonCallbacksEnter = {}
 local anonCallbacksExit = {}
 local anonCallbacksLayout = {}
 
-local function resetSelection(hide)
+local function resetSelection()
 	lib.dialog:Hide()
 
 	for frame, selection in next, frameSelections do
@@ -43,7 +43,7 @@ local function resetSelection(hide)
 			frame:SetMovable(false)
 		end
 
-		if hide then
+		if not lib.isEditing then
 			selection:Hide()
 			selection.isSelected = false
 		else
@@ -143,7 +143,7 @@ end
 local function onEditModeExit()
 	lib.isEditing = false
 
-	resetSelection(true)
+	resetSelection()
 
 	for _, callback in next, anonCallbacksExit do
 		callback()
