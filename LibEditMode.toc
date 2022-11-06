@@ -1,0 +1,15 @@
+## Interface: 100000
+## Author: p3lim
+## Version: @project-version@
+## Title: Lib: EditMode
+## Notes: Library that allows easy frame integration with Edit Mode
+## OptionalDeps: LibStub, LibDropDown
+
+#@non-debug@
+# LibStub\LibStub.lua
+# LibDropDown\embed.xml
+#@end-non-debug@
+
+embed.xml
+
+#tests\button.lua
