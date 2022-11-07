@@ -5,6 +5,10 @@
 ## Notes: Library that allows easy frame integration with Edit Mode
 ## OptionalDeps: LibStub, LibDropDown
 
+## X-Curse-Project-ID: 699702
+## X-WoWI-ID: 26456
+## X-Wago-ID: ZQ6aWjGW
+
 #@non-debug@
 # LibStub\LibStub.lua
 # LibDropDown\embed.xml
