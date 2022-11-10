@@ -6,6 +6,10 @@ if not lib then
 	return
 end
 
+-- wish we could use namespacing within libstub
+lib.internal = {}
+local internal = lib.internal
+
 local layoutNames = setmetatable({'Modern', 'Classic'}, {
 	__index = function(t, key)
 		if key > 2 then
@@ -36,7 +40,7 @@ local anonCallbacksExit = {}
 local anonCallbacksLayout = {}
 
 local function resetSelection()
-	lib.dialog:Hide()
+	internal.dialog:Hide()
 
 	for frame, selection in next, frameSelections do
 		if selection.isSelected then
@@ -116,7 +120,7 @@ local function onDragStop(self)
 	parent:ClearAllPoints()
 	parent:SetPoint(point, x, y)
 
-	lib:TriggerCallback(parent, point, x, y)
+	internal:TriggerCallback(parent, point, x, y)
 end
 
 local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSystem()
@@ -126,7 +130,7 @@ local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSy
 	if not self.isSelected then
 		self.parent:SetMovable(true)
 		self:ShowSelected(true)
-		lib.dialog:Update(self)
+		internal.dialog:Update(self)
 	end
 end
 
@@ -189,9 +193,9 @@ function lib:AddFrame(frame, callback, default)
 	frameCallbacks[frame] = callback
 	frameDefaults[frame] = default
 
-	if not lib.dialog then
-		lib.dialog = lib:CreateDialog()
-		lib.dialog:HookScript('OnHide', function()
+	if not internal.dialog then
+		internal.dialog = internal:CreateDialog()
+		internal.dialog:HookScript('OnHide', function()
 			resetSelection()
 		end)
 
@@ -278,19 +282,6 @@ function lib:IsInEditMode()
 	return lib.isEditing
 end
 
---[[ LibEditMode:TriggerCallback(_frame[, ...]_)
-Internal method used to trigger callbacks for registered frames.  
-Not to be confused with the callbacks registered with [RegisterCallback](#libeditmoderegistercallbackevent-callback).
-
-* `frame`: registered frame to trigger callbacks for
-* `...`: variable arguments passed to the internal callback logic
---]]
-function lib:TriggerCallback(frame, ...)
-	if frameCallbacks[frame] then
-		frameCallbacks[frame](frame, lib.activeLayoutName, ...)
-	end
-end
-
 --[[ LibEditMode:GetFrameDefaultPosition(_frame_)
 Returns the default position table registered with the frame.
 
@@ -304,16 +295,13 @@ function lib:GetFrameDefaultPosition(frame)
 	return frameDefaults[frame]
 end
 
---[[ LibEditMode:GetFrameSettings(_frame_)
-Returns the settings table defined for the registered frame.
+function internal:TriggerCallback(frame, ...)
+	if frameCallbacks[frame] then
+		frameCallbacks[frame](frame, lib.activeLayoutName, ...)
+	end
+end
 
-* `frame`: registered frame to return settings table for
-
-Returns:
-
-* `settings`: table containing [SettingObject](Types#settingobject) entries _(table)_
---]]
-function lib:GetFrameSettings(frame)
+function internal:GetFrameSettings(frame)
 	if frameSettings[frame] then
 		return frameSettings[frame], #frameSettings[frame]
 	else
@@ -321,16 +309,7 @@ function lib:GetFrameSettings(frame)
 	end
 end
 
---[[ LibEditMode:GetFrameButtons(_frame_)
-Returns the buttons table defined for the registered frame.
-
-* `frame`: registered frame to return buttons table for
-
-Returns:
-
-* `data`: table containing [ButtonObject](Types#buttonobject) entries _(table)_
---]]
-function lib:GetFrameButtons(frame)
+function internal:GetFrameButtons(frame)
 	if frameButtons[frame] then
 		return frameButtons[frame], #frameButtons[frame]
 	else

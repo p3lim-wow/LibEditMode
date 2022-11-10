@@ -1,4 +1,5 @@
 local lib = LibStub('LibEditMode')
+local internal = lib.internal
 
 -- replica of EditModeSystemSettingsDialog
 local dialogMixin = {}
@@ -21,12 +22,12 @@ function dialogMixin:Update(selection)
 end
 
 function dialogMixin:UpdateSettings()
-	lib:ReleaseAllPools()
+	internal.ReleaseAllPools()
 
-	local settings, num = lib:GetFrameSettings(self.selection.parent)
+	local settings, num = internal:GetFrameSettings(self.selection.parent)
 	if num > 0 then
 		for index, data in next, settings do
-			local pool = lib:GetPool(data.kind)
+			local pool = internal:GetPool(data.kind)
 			if pool then
 				local setting = pool:Acquire(self.Settings)
 				setting.layoutIndex = index
@@ -42,10 +43,10 @@ function dialogMixin:UpdateSettings()
 end
 
 function dialogMixin:UpdateButtons()
-	local buttons, num = lib:GetFrameButtons(self.selection.parent)
+	local buttons, num = internal:GetFrameButtons(self.selection.parent)
 	if num > 0 then
 		for index, data in next, buttons do
-			local button = lib:GetPool('button'):Acquire(self.Buttons)
+			local button = internal:GetPool('button'):Acquire(self.Buttons)
 			button.layoutIndex = index
 			button:SetText(data.text)
 			button:SetOnClickHandler(data.click)
@@ -53,7 +54,7 @@ function dialogMixin:UpdateButtons()
 		end
 	end
 
-	local resetPosition = lib:GetPool('button'):Acquire(self.Buttons)
+	local resetPosition = internal:GetPool('button'):Acquire(self.Buttons)
 	resetPosition.layoutIndex = num + 1
 	resetPosition:SetText(HUD_EDIT_MODE_RESET_POSITION)
 	resetPosition:SetOnClickHandler(GenerateClosure(self.ResetPosition, self))
@@ -61,7 +62,7 @@ function dialogMixin:UpdateButtons()
 end
 
 function dialogMixin:ResetSettings()
-	local settings, num = lib:GetFrameSettings(self.selection.parent)
+	local settings, num = internal:GetFrameSettings(self.selection.parent)
 	if num > 0 then
 		for _, data in next, settings do
 			data.set(lib.activeLayoutName, data.default)
@@ -85,14 +86,10 @@ function dialogMixin:ResetPosition()
 	parent:ClearAllPoints()
 	parent:SetPoint(pos.point, pos.x, pos.y)
 
-	lib:TriggerCallback(parent, pos.point, pos.x, pos.y)
+	internal:TriggerCallback(parent, pos.point, pos.x, pos.y)
 end
 
---[[ LibEditMode:CreateDialog()
-Internal method used to initialize the dialog frame.  
-Replicates the look of the EditModeSystemSettingsDialog template without re-using tainted logic.
---]]
-function lib:CreateDialog()
+function internal:CreateDialog()
 	local dialog = Mixin(CreateFrame('Frame', nil, UIParent, 'ResizeLayoutFrame'), dialogMixin)
 	dialog:SetSize(300, 350)
 	dialog:SetFrameStrata('DIALOG')
