@@ -340,7 +340,7 @@ end
 
 --[[ Types:header
 
-### SettingObject
+## SettingObject
 
 Table containing the following entries:
 
@@ -357,13 +357,13 @@ Table containing the following entries:
 
 Depending on the setting type there are additional required and optional entries:
 
-#### Dropdown
+### Dropdown
 
 | key     | value                                                                                                    | type  | required |
 |:--------|:---------------------------------------------------------------------------------------------------------|:------|:---------|
 | values  | LibDropDown [LineData](https://github.com/p3lim-wow/LibDropDown/wiki/Menu#menuaddlinedata) configuration | table | yes      |
 
-#### Slider
+### Slider
 
 | key       | value                             | type     | required | default |
 |:----------|:----------------------------------|:---------|:---------|:--------|
@@ -374,7 +374,7 @@ Depending on the setting type there are additional required and optional entries
 
 - The formatter passes `value` as the sole argument and expects a number value in return.
 
-### ButtonObject
+## ButtonObject
 
 Table containing the following entries:
 
@@ -383,7 +383,7 @@ Table containing the following entries:
 | text  | text rendered on the button     | string   | yes      |
 | click | callback when button is clicked | function | yes      |
 
-### SettingType
+## SettingType
 Convenient shorthand for `Enum.EditModeSettingDisplayType`.
 
 One of:
