@@ -164,7 +164,17 @@ local function onEditModeChanged(_, layoutInfo)
 end
 
 --[[ LibEditMode:AddFrame(_frame, callback, default_)
-TODO: docs
+Register a frame to be controlled by the Edit Mode.
+
+* `frame`: frame widget to be controlled
+* `callback`: callback that triggers whenever the frame has been repositioned
+* `default`: table containing the default position of the frame
+
+The `default` table must contain the following entries:
+
+* `point`: relative anchor point, e.g. `"CENTER"` _(string)_
+* `x`: horizontal offset from the anchor point _(number)_
+* `y`: vertical offset from the anchor point _(number)_
 --]]
 function lib:AddFrame(frame, callback, default)
 	local selection = CreateFrame('Frame', nil, frame, 'EditModeSystemSelectionTemplate')
@@ -200,7 +210,10 @@ function lib:AddFrame(frame, callback, default)
 end
 
 --[[ LibEditMode:AddFrameSettings(_frame, settings_)
-TODO: docs
+Register extra settings that will be displayed in a dialog attached to the frame in the Edit Mode.
+
+* `frame`: frame widget already registered with [AddFrame](#addframe)
+* `settings`: table containing [SettingObject](settingobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettings(frame, settings)
 	if not frameSelections[frame] then
@@ -211,7 +224,10 @@ function lib:AddFrameSettings(frame, settings)
 end
 
 --[[ LibEditMode:AddFrameSettingsButton(_frame, data_)
-TODO: docs
+Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
+
+* `frame`: frame widget already registered with [AddFrame](#addframe)
+* `data`: table containing [ButtonObject](buttonobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettingsButton(frame, data)
 	if not frameButtons[frame] then
@@ -222,7 +238,16 @@ function lib:AddFrameSettingsButton(frame, data)
 end
 
 --[[ LibEditMode:RegisterCallback(_event, callback_)
-TODO: docs
+Register extra callbacks whenever an event within the Edit Mode triggers.
+
+* `event`: event name _(string)_
+* `callback`: function that will be triggered with the event _(function)_
+
+Possible events:
+
+* `enter`: triggered when the Edit Mode is entered
+* `exit`: triggered when the Edit Mode is exited
+* `layout`: triggered when the Edit Mode layout is changed (which also occurs at login)
 --]]
 function lib:RegisterCallback(event, callback)
 	assert(event and type(event) == 'string', 'event must be a string')
@@ -240,26 +265,25 @@ function lib:RegisterCallback(event, callback)
 end
 
 --[[ LibEditMode:GetActiveLayoutName()
-TODO: docs
+Returns the active Edit Mode layout name.
 --]]
 function lib:GetActiveLayoutName()
 	return lib.activeLayoutName
 end
 
 --[[ LibEditMode:IsInEditMode()
-TODO: docs
+Returns whether the Edit Mode is currently active.
 --]]
 function lib:IsInEditMode()
 	return lib.isEditing
 end
 
---[[ LibEditMode.SettingType
-Convenient shorthand for `Enum.EditModeSettingDisplayType`.
---]]
-lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)
-
 --[[ LibEditMode:TriggerCallback(_frame[, ...]_)
-TODO: docs
+Internal method used to trigger callbacks for registered frames.  
+Not to be confused with the callbacks registered with [RegisterCallback](#registercallback).
+
+* `frame`: registered frame to trigger callbacks for
+* `...`: variable arguments passed to the internal callback logic
 --]]
 function lib:TriggerCallback(frame, ...)
 	if frameCallbacks[frame] then
@@ -268,14 +292,26 @@ function lib:TriggerCallback(frame, ...)
 end
 
 --[[ LibEditMode:GetFrameDefaultPosition(_frame_)
-TODO: docs
+Returns the default position table registered with the frame.
+
+* `frame`: registered frame to return positions for
+
+Returns:
+
+* `defaultPosition`: table registered with the frame in [AddFrame](#addframe) _(table)_
 --]]
 function lib:GetFrameDefaultPosition(frame)
 	return frameDefaults[frame]
 end
 
 --[[ LibEditMode:GetFrameSettings(_frame_)
-TODO: docs
+Returns the settings table defined for the registered frame.
+
+* `frame`: registered frame to return settings table for
+
+Returns:
+
+* `settings`: table containing [SettingObject](#settingobject) entries _(table)_
 --]]
 function lib:GetFrameSettings(frame)
 	if frameSettings[frame] then
@@ -286,7 +322,13 @@ function lib:GetFrameSettings(frame)
 end
 
 --[[ LibEditMode:GetFrameButtons(_frame_)
-TODO: docs
+Returns the buttons table defined for the registered frame.
+
+* `frame`: registered frame to return buttons table for
+
+Returns:
+
+* `data`: table containing [ButtonObject](#buttonobject) entries _(table)_
 --]]
 function lib:GetFrameButtons(frame)
 	if frameButtons[frame] then
@@ -295,3 +337,17 @@ function lib:GetFrameButtons(frame)
 		return nil, 0
 	end
 end
+
+--[[ LibEditMode.SettingType
+Convenient shorthand for `Enum.EditModeSettingDisplayType`.
+--]]
+lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)
+
+
+--[[ SettingObject
+TODO: docs
+--]]
+
+--[[ ButtonObject
+TODO: docs
+--]]

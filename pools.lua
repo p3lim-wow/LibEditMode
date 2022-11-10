@@ -27,8 +27,13 @@ end
 
 local pools = {}
 
---[[ LibEditMode:CreatePool(_kind, creationFunc, resetterFunc_)
-TODO: docs
+--[[ LibEditMode:CreatePool(_kind, creationFunc[, resetterFunc_])
+Internal method for creating a pool.  
+It's functionally equivalent to SharedXML/Pools.lua's `ObjectPoolMixin`, except `Acquire` can pass a parent frame.
+
+* `kind`: unique identifier _(string|number)_
+* `creationFunc`: function that will be called when a new object is acquired.
+* `resetterFunc`: optional function that will be called when an object is released.
 --]]
 function lib:CreatePool(kind, creationFunc, resetterFunc)
 	local pool = CreateFromMixins(poolMixin)
@@ -38,14 +43,20 @@ function lib:CreatePool(kind, creationFunc, resetterFunc)
 end
 
 --[[ LibEditMode:GetPool(_kind_)
-TODO: docs
+Internal method for retreiving a registered pool.
+
+* `kind`: pool identifier _(string|number)_
+
+Returns:
+
+* `pool`: object representing the pool, inheriting all methods of SharedXML/Pools.lua's `ObjectPoolMixin`.
 --]]
 function lib:GetPool(kind)
 	return pools[kind]
 end
 
 --[[ LibEditMode:ReleaseAllPools()
-TODO: docs
+Internal method for releasing all objects in all pools. Calls `resetterFunc` on each object.
 --]]
 function lib:ReleaseAllPools()
 	for _, pool in next, pools do

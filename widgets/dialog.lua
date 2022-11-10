@@ -89,7 +89,8 @@ function dialogMixin:ResetPosition()
 end
 
 --[[ LibEditMode:CreateDialog()
-TODO: docs
+Internal method used to initialize the dialog frame.  
+Replicates the look of the EditModeSystemSettingsDialog template without re-using tainted logic.
 --]]
 function lib:CreateDialog()
 	local dialog = Mixin(CreateFrame('Frame', nil, UIParent, 'ResizeLayoutFrame'), dialogMixin)
