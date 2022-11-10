@@ -213,7 +213,7 @@ end
 Register extra settings that will be displayed in a dialog attached to the frame in the Edit Mode.
 
 * `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
-* `settings`: table containing [SettingObject](ObjectTypes#settingobject) entries _(table, number indexed)_
+* `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettings(frame, settings)
 	if not frameSelections[frame] then
@@ -227,7 +227,7 @@ end
 Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
 
 * `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
-* `data`: table containing [ButtonObject](ObjectTypes#buttonobject) entries _(table, number indexed)_
+* `data`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettingsButton(frame, data)
 	if not frameButtons[frame] then
@@ -311,7 +311,7 @@ Returns the settings table defined for the registered frame.
 
 Returns:
 
-* `settings`: table containing [SettingObject](ObjectTypes#settingobject) entries _(table)_
+* `settings`: table containing [SettingObject](Types#settingobject) entries _(table)_
 --]]
 function lib:GetFrameSettings(frame)
 	if frameSettings[frame] then
@@ -328,7 +328,7 @@ Returns the buttons table defined for the registered frame.
 
 Returns:
 
-* `data`: table containing [ButtonObject](ObjectTypes#buttonobject) entries _(table)_
+* `data`: table containing [ButtonObject](Types#buttonobject) entries _(table)_
 --]]
 function lib:GetFrameButtons(frame)
 	if frameButtons[frame] then
@@ -338,17 +338,57 @@ function lib:GetFrameButtons(frame)
 	end
 end
 
---[[ LibEditMode.SettingType
-Convenient shorthand for `Enum.EditModeSettingDisplayType`.
---]]
-lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)
-
-
---[[ ObjectTypes:header
+--[[ Types:header
 
 ### SettingObject
-TODO: docs
+
+Table containing the following entries:
+
+| key     | value                         | type                        | required |
+|:--------|:------------------------------|:----------------------------|:---------|
+| kind    | setting type                  | [SettingType](#settingtype) | yes      |
+| name    | label for the setting         | string                      | yes      |
+| default | default value for the setting | any                         | yes      |
+| get     | getter for the current value  | function                    | yes      |
+| set     | setter for the new value      | function                    | yes      |
+
+- The getter passes `layoutName` as the sole argument and expects a value in return.  
+- The setter passes (`layoutName`, `newValue`) and expects no returns.
+
+Depending on the setting type there are additional required and optional entries:
+
+#### Dropdown
+
+| key     | value                                                                                                    | type  | required |
+|:--------|:---------------------------------------------------------------------------------------------------------|:------|:---------|
+| values  | LibDropDown [LineData](https://github.com/p3lim-wow/LibDropDown/wiki/Menu#menuaddlinedata) configuration | table | yes      |
+
+#### Slider
+
+| key       | value                             | type     | required | default |
+|:----------|:----------------------------------|:---------|:---------|:--------|
+| minValue  | lower bound for the slider        | number   | no       | 0       |
+| maxValue  | upper bound for the slider        | number   | no       | 1       |
+| valueStep | step increment between each value | number   | no       | 1       |
+| formatter | formatter for the display value   | function | no       |         |
+
+- The formatter passes `value` as the sole argument and expects a number value in return.
 
 ### ButtonObject
-TODO: docs
+
+Table containing the following entries:
+
+| key   | value                           | type     | required |
+|:------|:--------------------------------|----------|:---------|
+| text  | text rendered on the button     | string   | yes      |
+| click | callback when button is clicked | function | yes      |
+
+### SettingType
+Convenient shorthand for `Enum.EditModeSettingDisplayType`.
+
+One of:
+- `Dropdown`
+- `Checkbox`
+- `Slider`
 --]]
+lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)

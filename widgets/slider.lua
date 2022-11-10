@@ -11,7 +11,7 @@ function sliderMixin:Setup(data)
 
 	local stepSize = data.valueStep or 1
 	local steps = (data.maxValue - data.minValue) / stepSize
-	self.Slider:Init(data.get(lib.activeLayoutName), data.minValue, data.maxValue, steps, self.formatters)
+	self.Slider:Init(data.get(lib.activeLayoutName), data.minValue or 0, data.maxValue or 1, steps, self.formatters)
 	self.initInProgress = false
 end
 
