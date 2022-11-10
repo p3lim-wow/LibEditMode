@@ -213,7 +213,7 @@ end
 Register extra settings that will be displayed in a dialog attached to the frame in the Edit Mode.
 
 * `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
-* `settings`: table containing [SettingObject](settingobject) entries _(table, number indexed)_
+* `settings`: table containing [SettingObject](ObjectTypes#settingobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettings(frame, settings)
 	if not frameSelections[frame] then
@@ -227,7 +227,7 @@ end
 Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
 
 * `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
-* `data`: table containing [ButtonObject](buttonobject) entries _(table, number indexed)_
+* `data`: table containing [ButtonObject](ObjectTypes#buttonobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettingsButton(frame, data)
 	if not frameButtons[frame] then
@@ -311,7 +311,7 @@ Returns the settings table defined for the registered frame.
 
 Returns:
 
-* `settings`: table containing [SettingObject](#settingobject) entries _(table)_
+* `settings`: table containing [SettingObject](ObjectTypes#settingobject) entries _(table)_
 --]]
 function lib:GetFrameSettings(frame)
 	if frameSettings[frame] then
@@ -328,7 +328,7 @@ Returns the buttons table defined for the registered frame.
 
 Returns:
 
-* `data`: table containing [ButtonObject](#buttonobject) entries _(table)_
+* `data`: table containing [ButtonObject](ObjectTypes#buttonobject) entries _(table)_
 --]]
 function lib:GetFrameButtons(frame)
 	if frameButtons[frame] then
