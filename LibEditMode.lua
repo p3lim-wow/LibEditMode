@@ -252,6 +252,8 @@ Possible events:
 * `enter`: triggered when the Edit Mode is entered
 * `exit`: triggered when the Edit Mode is exited
 * `layout`: triggered when the Edit Mode layout is changed (which also occurs at login)
+    * signature:
+        * `layoutName`: name of the new layout
 --]]
 function lib:RegisterCallback(event, callback)
 	assert(event and type(event) == 'string', 'event must be a string')
