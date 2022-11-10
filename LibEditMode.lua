@@ -344,10 +344,11 @@ Convenient shorthand for `Enum.EditModeSettingDisplayType`.
 lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)
 
 
---[[ SettingObject
-TODO: docs
---]]
+--[[ Object types:header
 
---[[ ButtonObject
+### SettingObject
+TODO: docs
+
+### ButtonObject
 TODO: docs
 --]]
