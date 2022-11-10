@@ -212,7 +212,7 @@ end
 --[[ LibEditMode:AddFrameSettings(_frame, settings_)
 Register extra settings that will be displayed in a dialog attached to the frame in the Edit Mode.
 
-* `frame`: frame widget already registered with [AddFrame](#addframe)
+* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
 * `settings`: table containing [SettingObject](settingobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettings(frame, settings)
@@ -226,7 +226,7 @@ end
 --[[ LibEditMode:AddFrameSettingsButton(_frame, data_)
 Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
 
-* `frame`: frame widget already registered with [AddFrame](#addframe)
+* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
 * `data`: table containing [ButtonObject](buttonobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettingsButton(frame, data)
@@ -280,7 +280,7 @@ end
 
 --[[ LibEditMode:TriggerCallback(_frame[, ...]_)
 Internal method used to trigger callbacks for registered frames.  
-Not to be confused with the callbacks registered with [RegisterCallback](#registercallback).
+Not to be confused with the callbacks registered with [RegisterCallback](#libeditmoderegistercallbackevent-callback).
 
 * `frame`: registered frame to trigger callbacks for
 * `...`: variable arguments passed to the internal callback logic
@@ -298,7 +298,7 @@ Returns the default position table registered with the frame.
 
 Returns:
 
-* `defaultPosition`: table registered with the frame in [AddFrame](#addframe) _(table)_
+* `defaultPosition`: table registered with the frame in [AddFrame](#libeditmodeaddframeframe-callback-default) _(table)_
 --]]
 function lib:GetFrameDefaultPosition(frame)
 	return frameDefaults[frame]
