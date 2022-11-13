@@ -16,6 +16,10 @@ ignore = {
 	'631', -- line is too long
 }
 
+exclude_files = {
+	'tests/*',
+}
+
 read_globals = {
 	-- FrameXML objects
 	'UIParent', -- FrameXML/UIParent.xml
