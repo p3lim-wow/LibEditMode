@@ -281,7 +281,7 @@ end
 Returns whether the Edit Mode is currently active.
 --]]
 function lib:IsInEditMode()
-	return lib.isEditing
+	return not not lib.isEditing
 end
 
 --[[ LibEditMode:GetFrameDefaultPosition(_frame_)
