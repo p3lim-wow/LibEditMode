@@ -272,6 +272,9 @@ end
 
 --[[ LibEditMode:GetActiveLayoutName()
 Returns the active Edit Mode layout name.
+
+This will not return valid data until after the layout has been loaded from the server.  
+Data will be available for the ["layout" callback](#libeditmoderegistercallbackevent-callback).
 --]]
 function lib:GetActiveLayoutName()
 	return lib.activeLayoutName
