@@ -1,5 +1,8 @@
-local lib = LibStub('LibEditMode')
-local internal = lib.internal
+local MINOR = 2
+local lib, minor = LibStub('LibEditMode')
+if minor > MINOR then
+	return
+end
 
 local LDD = LibStub('LibDropDown', true)
 if not LDD then
@@ -36,7 +39,7 @@ function dropdownMixin:OnSettingSelected(value)
 	self.Dropdown:SetText(value)
 end
 
-internal:CreatePool(lib.SettingType.Dropdown, function()
+lib.internal:CreatePool(lib.SettingType.Dropdown, function()
 	local frame = CreateFrame('Frame', nil, UIParent, 'ResizeLayoutFrame')
 	frame.fixedHeight = 32
 	Mixin(frame, dropdownMixin)

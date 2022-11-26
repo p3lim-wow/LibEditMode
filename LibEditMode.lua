@@ -1,13 +1,11 @@
-local MAJOR = 'LibEditMode'
 local MINOR = 2
-
-local lib = LibStub:NewLibrary(MAJOR, MINOR)
+local lib, oldMinor = LibStub:NewLibrary('LibEditMode', MINOR)
 if not lib then
+	-- this or a newer version is already loaded
 	return
 end
 
--- wish we could use namespacing within libstub
-lib.internal = {}
+lib.internal = {} -- internal methods, do not use directly
 local internal = lib.internal
 
 local layoutNames = setmetatable({'Modern', 'Classic'}, {
@@ -376,3 +374,30 @@ One of:
 - `Slider`
 --]]
 lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)
+
+-- compat
+if oldMinor < 3 then
+	-- internal restructuring happened in minor-3, add compat in case someone used it
+	lib.dialog = internal.dialog
+	function lib:TriggerCallback(...)
+		internal:TriggerCallback(...)
+	end
+	function lib:GetFrameSettings(...)
+		return internal:GetFrameSettings(...)
+	end
+	function lib:GetFrameButtons(...)
+		return internal:GetFrameButtons(...)
+	end
+	function lib:CreatePool(...)
+		internal:CreatePool(...)
+	end
+	function lib:GetPool(...)
+		return internal:GetPool(...)
+	end
+	function lib:ReleaseAllPools()
+		internal:ReleaseAllPools()
+	end
+	function lib:CreateDialog()
+		return internal:CreateDialog()
+	end
+end

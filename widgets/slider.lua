@@ -1,5 +1,8 @@
-local lib = LibStub('LibEditMode')
-local internal = lib.internal
+local MINOR = 2
+local lib, minor = LibStub('LibEditMode')
+if minor > MINOR then
+	return
+end
 
 local sliderMixin = {}
 function sliderMixin:Setup(data)
@@ -22,7 +25,7 @@ function sliderMixin:OnSliderValueChanged(value)
 	end
 end
 
-internal:CreatePool(lib.SettingType.Slider, function()
+lib.internal:CreatePool(lib.SettingType.Slider, function()
 	local frame = CreateFrame('Frame', nil, UIParent, 'EditModeSettingSliderTemplate')
 	Mixin(frame, sliderMixin)
 

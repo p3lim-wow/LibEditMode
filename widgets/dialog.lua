@@ -1,4 +1,9 @@
-local lib = LibStub('LibEditMode')
+local MINOR = 2
+local lib, minor = LibStub('LibEditMode')
+if minor > MINOR then
+	return
+end
+
 local internal = lib.internal
 
 -- replica of EditModeSystemSettingsDialog
