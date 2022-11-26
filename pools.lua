@@ -1,5 +1,8 @@
-local lib = LibStub('LibEditMode')
-local internal = lib.internal
+local MINOR = 2
+local lib, minor = LibStub('LibEditMode')
+if minor > MINOR then
+	return
+end
 
 -- fork of ObjectPoolMixin to support passing through parent
 local poolMixin = CreateFromMixins(ObjectPoolMixin)
@@ -27,8 +30,7 @@ function poolMixin:Acquire(parent)
 end
 
 local pools = {}
-
-function internal:CreatePool(kind, creationFunc, resetterFunc)
+function lib.internal:CreatePool(kind, creationFunc, resetterFunc)
 	-- wrapper for ObjectPoolMixin
 	local pool = CreateFromMixins(poolMixin)
 	pool:OnLoad(creationFunc, resetterFunc)
@@ -36,11 +38,11 @@ function internal:CreatePool(kind, creationFunc, resetterFunc)
 	pools[kind] = pool
 end
 
-function internal:GetPool(kind)
+function lib.internal:GetPool(kind)
 	return pools[kind]
 end
 
-function internal:ReleaseAllPools()
+function lib.internal:ReleaseAllPools()
 	for _, pool in next, pools do
 		pool:ReleaseAll()
 	end
