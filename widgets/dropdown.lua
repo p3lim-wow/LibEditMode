@@ -4,7 +4,7 @@ if minor > MINOR then
 	return
 end
 
-local LDD = LibStub('LibDropDown', true)
+local LDD, lddMinor = LibStub('LibDropDown', true)
 if not LDD then
 	error('LibEditMode requires LibDropDown to function')
 end
@@ -35,7 +35,9 @@ end
 function dropdownMixin:OnSettingSelected(value)
 	self.setting.set(lib.activeLayoutName, value)
 
-	self.Dropdown:Refresh()
+	if lddMinor >= 7 then
+		self.Dropdown:Refresh()
+	end
 	self.Dropdown:SetText(value)
 end
 
