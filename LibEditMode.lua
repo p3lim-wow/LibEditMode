@@ -378,7 +378,8 @@ lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)
 -- compat
 if oldMinor < 3 then
 	-- internal restructuring happened in minor-3, add compat in case someone used it
-	lib.dialog = internal.dialog
+	lib.dialog = internal.dialog -- this will just be lost to the ages, since we can't really turn
+	                             -- lib into a metatable just for this (or atleast shouldn't)
 	function lib:TriggerCallback(...)
 		internal:TriggerCallback(...)
 	end
