@@ -35,7 +35,7 @@ end
 function dropdownMixin:OnSettingSelected(value)
 	self.setting.set(lib.activeLayoutName, value)
 
-	if lddMinor >= 7 then
+	if lddMinor >= 7 and lddMinor < 9 then
 		self.Dropdown:Refresh()
 	end
 	self.Dropdown:SetText(value)
