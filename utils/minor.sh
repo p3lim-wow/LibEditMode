@@ -22,13 +22,3 @@ while read -r file; do
   fi
 done < <(find . -name '*.lua')
 echo
-
-read -r -p $'\e[33mTag and push? (y/N) \e[0m' -n 1
-echo
-
-if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-  exit
-fi
-
-git tag -a -m "Tag MINOR-${MINOR}" $MINOR
-git push origin --tags
