@@ -16,7 +16,7 @@ jobs:
         uses: p3lim/toc-interface-updater@v2
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v5
         with:
           title: Update Interface version
           body:
