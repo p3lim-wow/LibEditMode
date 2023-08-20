@@ -12,7 +12,6 @@ externals:
 
 required-dependencies:
   - libstub
-  - libdropdown
 
 ignore:
   - README.md
