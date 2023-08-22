@@ -60,4 +60,7 @@ lib.internal:CreatePool(lib.SettingType.Dropdown, function()
 	frame.Dropdown = dropdown
 
 	return frame
+end, function(_, frame)
+	frame:Hide()
+	frame.layoutIndex = nil
 end)

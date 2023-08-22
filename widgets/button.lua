@@ -6,4 +6,7 @@ end
 
 lib.internal:CreatePool('button', function()
 	return CreateFrame('Button', nil, UIParent, 'EditModeSystemSettingsDialogExtraButtonTemplate')
+end, function(_, frame)
+	frame:Hide()
+	frame.layoutIndex = nil
 end)

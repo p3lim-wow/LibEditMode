@@ -37,4 +37,7 @@ lib.internal:CreatePool(lib.SettingType.Slider, function()
 
 	frame:OnLoad()
 	return frame
+end, function(_, frame)
+	frame:Hide()
+	frame.layoutIndex = nil
 end)

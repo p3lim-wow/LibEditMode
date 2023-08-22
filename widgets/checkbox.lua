@@ -22,4 +22,7 @@ end
 lib.internal:CreatePool(lib.SettingType.Checkbox, function()
 	local frame = CreateFrame('Frame', nil, UIParent, 'EditModeSettingCheckboxTemplate')
 	return Mixin(frame, checkboxMixin)
+end, function(_, frame)
+	frame:Hide()
+	frame.layoutIndex = nil
 end)
