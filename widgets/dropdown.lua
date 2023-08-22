@@ -26,7 +26,7 @@ function dropdownMixin:Setup(data)
 		info.keepShown = false
 		self.Dropdown:Add(info)
 
-		if info.checked then
+		if info.checked() then
 			self.Dropdown:SetText(info.text)
 		end
 	end
