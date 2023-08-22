@@ -9,8 +9,8 @@ if not LDD then
 	error('LibEditMode requires LibDropDown to function')
 end
 
-local function isChecked(a, getB)
-	return a == getB(lib.activeLayoutName)
+local function isChecked(a, getB, default)
+	return a == (getB(lib.activeLayoutName) or default)
 end
 
 local dropdownMixin = {}
@@ -21,7 +21,7 @@ function dropdownMixin:Setup(data)
 	self.Dropdown:Clear()
 
 	for _, info in next, data.values do
-		info.checked = GenerateClosure(isChecked, info.text, data.get)
+		info.checked = GenerateClosure(isChecked, info.text, data.get, data.default)
 		info.func = GenerateClosure(self.OnSettingSelected, self, info.text)
 		info.keepShown = false
 		self.Dropdown:Add(info)

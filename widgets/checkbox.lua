@@ -9,7 +9,7 @@ function checkboxMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.name)
 
-	self.checked = data.get(lib.activeLayoutName)
+	self.checked = data.get(lib.activeLayoutName) or data.default
 	self.Button:SetChecked(not not self.checked)
 end
 
