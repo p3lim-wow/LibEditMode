@@ -138,7 +138,7 @@ local function onEditModeEnter()
 	resetSelection()
 
 	for _, callback in next, anonCallbacksEnter do
-		callback()
+		securecallfunction(callback)
 	end
 end
 
@@ -148,7 +148,7 @@ local function onEditModeExit()
 	resetSelection()
 
 	for _, callback in next, anonCallbacksExit do
-		callback()
+		securecallfunction(callback)
 	end
 end
 
@@ -159,7 +159,7 @@ local function onEditModeChanged(_, layoutInfo)
 		lib.activeLayoutName = layoutName
 
 		for _, callback in next, anonCallbacksLayout do
-			callback(layoutName)
+			securecallfunction(callback, layoutName)
 		end
 
 		initialLayoutTriggered = true
@@ -269,7 +269,7 @@ function lib:RegisterCallback(event, callback)
 
 		if initialLayoutTriggered then
 			-- callback registered late, let's manually trigger it
-			callback(lib.activeLayoutName)
+			securecallfunction(callback, lib.activeLayoutName)
 		end
 	else
 		error('invalid callback event "' .. event .. '"')
@@ -308,7 +308,7 @@ end
 
 function internal:TriggerCallback(frame, ...)
 	if frameCallbacks[frame] then
-		frameCallbacks[frame](frame, lib.activeLayoutName, ...)
+		securecallfunction(frameCallbacks[frame], frame, lib.activeLayoutName, ...)
 	end
 end
 
