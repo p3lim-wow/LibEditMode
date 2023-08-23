@@ -26,7 +26,7 @@ read_globals = {
 	'EditModeManagerFrame', -- FrameXML/EditModeManager.xml
 
 	-- FrameXML functions
-	'CopyTable', -- FrameXML/TableUtil.lua 
+	'CopyTable', -- FrameXML/TableUtil.lua
 
 	-- SharedXML objects
 	'ObjectPoolMixin', -- SharedXML/Pools.lua
@@ -54,6 +54,7 @@ read_globals = {
 	'CreateFrame',
 	'PlaySound',
 	'hooksecurefunc',
+	'securecallfunction',
 
 	-- exposed from other addons
 	'LibStub',
