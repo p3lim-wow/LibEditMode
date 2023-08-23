@@ -152,7 +152,6 @@ local function onEditModeExit()
 	end
 end
 
-local initialLayoutTriggered
 local function onEditModeChanged(_, layoutInfo)
 	local layoutName = layoutNames[layoutInfo.activeLayout]
 	if layoutName ~= lib.activeLayoutName then
@@ -161,8 +160,6 @@ local function onEditModeChanged(_, layoutInfo)
 		for _, callback in next, anonCallbacksLayout do
 			securecallfunction(callback, layoutName)
 		end
-
-		initialLayoutTriggered = true
 
 		-- TODO: we should update the position of the button here, let the user not deal with that
 	end
@@ -266,11 +263,6 @@ function lib:RegisterCallback(event, callback)
 		table.insert(anonCallbacksExit, callback)
 	elseif event == 'layout' then
 		table.insert(anonCallbacksLayout, callback)
-
-		if initialLayoutTriggered then
-			-- callback registered late, let's manually trigger it
-			securecallfunction(callback, lib.activeLayoutName)
-		end
 	else
 		error('invalid callback event "' .. event .. '"')
 	end
