@@ -341,9 +341,15 @@ Depending on the setting type there are additional required and optional entries
 
 ### Dropdown
 
-| key     | value                                                                                                    | type  | required |
-|:--------|:---------------------------------------------------------------------------------------------------------|:------|:---------|
-| values  | LibDropDown [LineData](https://github.com/p3lim-wow/LibDropDown/wiki/Menu#menuaddlinedata) configuration | table | yes      |
+| key       | value                                                                                                                 | type     | required |
+|:----------|:----------------------------------------------------------------------------------------------------------------------|:---------|:---------|
+| values    | indexed table containing [DropdownOption](#dropdownoption)s                                                           | table    | no       |
+| generator | [Dropdown `SetupMenu` "generator" (callback)](https://warcraft.wiki.gg/wiki/Patch_11.0.0/API_changes#New_menu_system) | function | no       |
+
+- Either `values` or `generator` is required, the former for simple menues and the latter for complex ones.
+    - They are not exclusive, but `generator` takes precedence (e.g. `values` will be available but not used).
+- `generator` signature is `(dropdown, rootDescription, settingObject)` - `settingObject` being the addition to the default arguments.
+	- getters and setters are not handled using `generator`, and must be handled by the layout
 
 ### Slider
 
@@ -364,6 +370,15 @@ Table containing the following entries:
 |:------|:--------------------------------|----------|:---------|
 | text  | text rendered on the button     | string   | yes      |
 | click | callback when button is clicked | function | yes      |
+
+## DropdownOption
+
+Table containing the following entries:
+
+| key     | value                                                              | type    | required |
+|:--------|:-------------------------------------------------------------------|---------|:---------|
+| text    | text rendered in the dropdown                                      | string  | yes      |
+| isRadio | turns the dropdown entry into a Radio button, otherwise a Checkbox | boolean | no       |
 
 ## SettingType
 Convenient shorthand for `Enum.EditModeSettingDisplayType`.
