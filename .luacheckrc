@@ -29,6 +29,7 @@ read_globals = {
 	'CopyTable', -- FrameXML/TableUtil.lua
 
 	-- SharedXML objects
+	'CreateObjectPool',
 	'ObjectPoolMixin', -- SharedXML/Pools.lua
 	'EventRegistry', -- SharedXML/GlobalCallbackRegistry.lua
 	'MinimalSliderWithSteppersMixin', -- SharedXML/Slider/MinimalSlider.lua

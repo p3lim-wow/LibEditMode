@@ -23,7 +23,7 @@ function dropdownMixin:Setup(data)
 			pcall(data.generator, owner, rootDescription, data)
 		end)
 	elseif data.values then
-		self.Dropdown:SetupMenu(function(dropdown, rootDescription)
+		self.Dropdown:SetupMenu(function(_, rootDescription)
 			for _, value in next, data.values do
 				if value.isRadio then
 					rootDescription:CreateRadio(value.text, get, set, {
