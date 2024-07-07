@@ -27,20 +27,20 @@ local layoutNames = setmetatable({'Modern', 'Classic'}, {
 	end
 })
 
-local frameSelections = {}
-local frameCallbacks = {}
-local frameDefaults = {}
-local frameSettings = {}
-local frameButtons = {}
+lib.frameSelections = lib.frameSelections or {}
+lib.frameCallbacks = lib.frameCallbacks or {}
+lib.frameDefaults = lib.frameDefaults or {}
+lib.frameSettings = lib.frameSettings or {}
+lib.frameButtons = lib.frameButtons or {}
 
-local anonCallbacksEnter = {}
-local anonCallbacksExit = {}
-local anonCallbacksLayout = {}
+lib.anonCallbacksEnter = lib.anonCallbacksEnter or {}
+lib.anonCallbacksExit = lib.anonCallbacksExit or {}
+lib.anonCallbacksLayout = lib.anonCallbacksLayout or {}
 
 local function resetSelection()
 	internal.dialog:Hide()
 
-	for frame, selection in next, frameSelections do
+	for frame, selection in next, lib.frameSelections do
 		if selection.isSelected then
 			frame:SetMovable(false)
 		end
@@ -137,7 +137,7 @@ local function onEditModeEnter()
 
 	resetSelection()
 
-	for _, callback in next, anonCallbacksEnter do
+	for _, callback in next, lib.anonCallbacksEnter do
 		securecallfunction(callback)
 	end
 end
@@ -147,7 +147,7 @@ local function onEditModeExit()
 
 	resetSelection()
 
-	for _, callback in next, anonCallbacksExit do
+	for _, callback in next, lib.anonCallbacksExit do
 		securecallfunction(callback)
 	end
 end
@@ -157,7 +157,7 @@ local function onEditModeChanged(_, layoutInfo)
 	if layoutName ~= lib.activeLayoutName then
 		lib.activeLayoutName = layoutName
 
-		for _, callback in next, anonCallbacksLayout do
+		for _, callback in next, lib.anonCallbacksLayout do
 			securecallfunction(callback, layoutName)
 		end
 
@@ -187,9 +187,9 @@ function lib:AddFrame(frame, callback, default)
 	selection.Label:SetText(frame.editModeName or frame:GetName())
 	selection:Hide()
 
-	frameSelections[frame] = selection
-	frameCallbacks[frame] = callback
-	frameDefaults[frame] = default
+	lib.frameSelections[frame] = selection
+	lib.frameCallbacks[frame] = callback
+	lib.frameDefaults[frame] = default
 
 	if not internal.dialog then
 		internal.dialog = internal:CreateDialog()
@@ -218,11 +218,11 @@ Register extra settings that will be displayed in a dialog attached to the frame
 * `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettings(frame, settings)
-	if not frameSelections[frame] then
+	if not lib.frameSelections[frame] then
 		error('frame must be registered')
 	end
 
-	frameSettings[frame] = settings
+	lib.frameSettings[frame] = settings
 end
 
 --[[ LibEditMode:AddFrameSettingsButton(_frame, data_)
@@ -232,11 +232,11 @@ Register extra buttons that will be displayed in a dialog attached to the frame 
 * `data`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettingsButton(frame, data)
-	if not frameButtons[frame] then
-		frameButtons[frame] = {}
+	if not lib.frameButtons[frame] then
+		lib.frameButtons[frame] = {}
 	end
 
-	table.insert(frameButtons[frame], data)
+	table.insert(lib.frameButtons[frame], data)
 end
 
 --[[ LibEditMode:RegisterCallback(_event, callback_)
@@ -258,11 +258,11 @@ function lib:RegisterCallback(event, callback)
 	assert(callback and type(callback) == 'function', 'callback must be a function')
 
 	if event == 'enter' then
-		table.insert(anonCallbacksEnter, callback)
+		table.insert(lib.anonCallbacksEnter, callback)
 	elseif event == 'exit' then
-		table.insert(anonCallbacksExit, callback)
+		table.insert(lib.anonCallbacksExit, callback)
 	elseif event == 'layout' then
-		table.insert(anonCallbacksLayout, callback)
+		table.insert(lib.anonCallbacksLayout, callback)
 	else
 		error('invalid callback event "' .. event .. '"')
 	end
@@ -295,26 +295,26 @@ Returns:
 * `defaultPosition`: table registered with the frame in [AddFrame](#libeditmodeaddframeframe-callback-default) _(table)_
 --]]
 function lib:GetFrameDefaultPosition(frame)
-	return frameDefaults[frame]
+	return lib.frameDefaults[frame]
 end
 
 function internal:TriggerCallback(frame, ...)
-	if frameCallbacks[frame] then
-		securecallfunction(frameCallbacks[frame], frame, lib.activeLayoutName, ...)
+	if lib.frameCallbacks[frame] then
+		securecallfunction(lib.frameCallbacks[frame], frame, lib.activeLayoutName, ...)
 	end
 end
 
 function internal:GetFrameSettings(frame)
-	if frameSettings[frame] then
-		return frameSettings[frame], #frameSettings[frame]
+	if lib.frameSettings[frame] then
+		return lib.frameSettings[frame], #lib.frameSettings[frame]
 	else
 		return nil, 0
 	end
 end
 
 function internal:GetFrameButtons(frame)
-	if frameButtons[frame] then
-		return frameButtons[frame], #frameButtons[frame]
+	if lib.frameButtons[frame] then
+		return lib.frameButtons[frame], #lib.frameButtons[frame]
 	else
 		return nil, 0
 	end
