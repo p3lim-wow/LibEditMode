@@ -4,7 +4,7 @@ if minor > MINOR then
 	return
 end
 
-local Acquire = CreateObjectPool().Acquire
+local Acquire = CreateUnsecuredObjectPool().Acquire
 local function acquire(self, parent)
 	local obj, new = Acquire(self)
 	obj:SetParent(parent)
@@ -13,7 +13,7 @@ end
 
 local pools = {}
 function lib.internal:CreatePool(kind, creationFunc, resetterFunc)
-	local pool = CreateObjectPool(creationFunc, resetterFunc)
+	local pool = CreateUnsecuredObjectPool(creationFunc, resetterFunc)
 	pool.Acquire = acquire
 	pools[kind] = pool
 end
