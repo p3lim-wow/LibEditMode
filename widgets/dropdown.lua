@@ -24,6 +24,10 @@ function dropdownMixin:Setup(data)
 		end)
 	elseif data.values then
 		self.Dropdown:SetupMenu(function(_, rootDescription)
+			if data.height then
+				rootDescription:SetScrollMode(data.height)
+			end
+
 			for _, value in next, data.values do
 				if value.isRadio then
 					rootDescription:CreateRadio(value.text, get, set, {
