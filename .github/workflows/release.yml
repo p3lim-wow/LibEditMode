@@ -1,8 +1,12 @@
 name: Package and release
+
 on:
   push:
     tags:
       - '**'
+
+permissions:
+  contents: write # required to create a release
 
 jobs:
   release:
@@ -15,8 +19,8 @@ jobs:
 
       - name: Package and release
         uses: BigWigsMods/packager@v2
-    env:
-      CF_API_KEY: ${{ secrets.CF_API_KEY }}
-      WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
-      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-      WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+          WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
