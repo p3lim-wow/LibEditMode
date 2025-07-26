@@ -184,8 +184,17 @@ function lib:AddFrame(frame, callback, default)
 	selection:SetScript('OnMouseDown', onMouseDown)
 	selection:SetScript('OnDragStart', onDragStart)
 	selection:SetScript('OnDragStop', onDragStop)
-	selection.Label:SetText(frame.editModeName or frame:GetName())
 	selection:Hide()
+
+	if select(4, GetBuildInfo()) >= 110200 then
+		-- 11.2 requires a system name to work correctly, we'll fake it
+		selection.system = {}
+		selection.system.GetSystemName = function()
+			return frame.editModeName or frame:GetName()
+		end
+	else
+		selection.Label:SetText(frame.editModeName or frame:GetName())
+	end
 
 	lib.frameSelections[frame] = selection
 	lib.frameCallbacks[frame] = callback
