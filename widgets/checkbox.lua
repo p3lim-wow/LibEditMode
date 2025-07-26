@@ -1,4 +1,4 @@
-local MINOR = 8
+local MINOR = 9
 local lib, minor = LibStub('LibEditMode')
 if minor > MINOR then
 	return
