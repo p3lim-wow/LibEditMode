@@ -1,4 +1,4 @@
-## Interface: 110200
+## Interface: 110200, 110205
 ## Author: p3lim
 ## Version: @project-version@
 ## Title: Lib: EditMode
