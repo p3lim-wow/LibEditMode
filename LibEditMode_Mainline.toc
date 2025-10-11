@@ -15,4 +15,4 @@
 
 embed.xml
 
-#tests\xp.lua
+#tests\button.lua
