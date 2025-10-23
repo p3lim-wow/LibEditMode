@@ -55,6 +55,11 @@ local function resetSelection()
 end
 
 local function onDragStart(self)
+	if InCombatLockdown() then
+		-- TODO: maybe add a warning?
+		return
+	end
+
 	self.parent:StartMoving()
 end
 
@@ -108,6 +113,11 @@ local function normalizePosition(frame)
 end
 
 local function updatePosition(selection, xDelta, yDelta)
+	if InCombatLockdown() then
+		-- TODO: maybe add a warning?
+		return
+	end
+
 	local parent = selection.parent
 	local point, x, y = normalizePosition(parent)
 	x, y = x + (xDelta or 0), y + (yDelta or 0)
@@ -122,6 +132,11 @@ local function updatePosition(selection, xDelta, yDelta)
 end
 
 local function onDragStop(self)
+	if InCombatLockdown() then
+		-- TODO: maybe add a warning?
+		return
+	end
+
 	local parent = self.parent
 	parent:StopMovingOrSizing()
 
@@ -132,6 +147,11 @@ local function onDragStop(self)
 end
 
 local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSystem()
+	if InCombatLockdown() then
+		-- TODO: maybe add a warning?
+		return
+	end
+
 	resetSelection()
 	EditModeManagerFrame:ClearSelectedSystem() -- possible taint
 

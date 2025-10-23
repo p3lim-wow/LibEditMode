@@ -102,6 +102,11 @@ function dialogMixin:ResetSettings()
 end
 
 function dialogMixin:ResetPosition()
+	if InCombatLockdown() then
+		-- TODO: maybe add a warning?
+		return
+	end
+
 	local parent = self.selection.parent
 	local pos = lib:GetFrameDefaultPosition(parent)
 	if not pos then

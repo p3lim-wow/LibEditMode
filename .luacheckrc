@@ -48,6 +48,7 @@ read_globals = {
 	-- API
 	'CreateFrame',
 	'GetBuildInfo',
+	'InCombatLockdown',
 	'IsShiftKeyDown',
 	'PlaySound',
 	'hooksecurefunc',
