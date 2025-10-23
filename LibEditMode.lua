@@ -60,6 +60,7 @@ local function onDragStart(self)
 		return
 	end
 
+	self:RegisterEvent('PLAYER_REGEN_DISABLED')
 	self.parent:StartMoving()
 end
 
@@ -132,13 +133,9 @@ local function updatePosition(selection, xDelta, yDelta)
 end
 
 local function onDragStop(self)
-	if InCombatLockdown() then
-		-- TODO: maybe add a warning?
-		return
-	end
-
 	local parent = self.parent
 	parent:StopMovingOrSizing()
+	self:UnregisterEvent('PLAYER_REGEN_DISABLED')
 
 	-- TODO: snap position to grid
 	-- FrameXML/EditModeUtil.lua
@@ -214,6 +211,7 @@ function lib:AddFrame(frame, callback, default)
 	selection:SetScript('OnMouseDown', onMouseDown)
 	selection:SetScript('OnDragStart', onDragStart)
 	selection:SetScript('OnDragStop', onDragStop)
+	selection:SetScript('OnEvent', onDragStop)
 	selection:Hide()
 
 	if select(4, GetBuildInfo()) >= 110200 then
