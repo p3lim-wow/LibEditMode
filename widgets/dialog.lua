@@ -53,6 +53,10 @@ function dialogMixin:UpdateSettings()
 	self.Settings.ResetButton:SetEnabled(num > 0)
 end
 
+local function closeEnough(a, b)
+	return math.abs(a - b) < 0.01
+end
+
 local function isDefaultPosition(parent)
 	local point, _, _, x, y = parent:GetPoint()
 	local default = lib:GetFrameDefaultPosition(parent)
@@ -60,7 +64,7 @@ local function isDefaultPosition(parent)
 		default = CopyTable(CENTER)
 	end
 
-	return point == default.point and x == default.x and y == default.y
+	return point == default.point and closeEnough(x, default.x) and closeEnough(y, default.y)
 end
 
 function dialogMixin:UpdateButtons()
