@@ -107,7 +107,8 @@ local function normalizePosition(frame)
 	return point, x / scale, y / scale
 end
 
-local function updateParentPosition(parent, xDelta, yDelta)
+local function updatePosition(selection, xDelta, yDelta)
+	local parent = selection.parent
 	local point, x, y = normalizePosition(parent)
 	x, y = x + (xDelta or 0), y + (yDelta or 0)
 	parent:ClearAllPoints()
@@ -123,7 +124,7 @@ local function onDragStop(self)
 	-- TODO: snap position to grid
 	-- FrameXML/EditModeUtil.lua
 
-	updateParentPosition(parent)
+	updatePosition(self)
 
 	if self.isSelected then
 		internal.dialog:Update(self)
@@ -339,7 +340,7 @@ function internal:GetFrameButtons(frame)
 end
 
 function internal:MoveParent(selection, x, y)
-	updateParentPosition(selection.parent, x, y)
+	updatePosition(selection, x, y)
 
 	if selection.isSelected then
 		internal.dialog:Update(selection)
