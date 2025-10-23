@@ -1,4 +1,4 @@
-local MINOR = 10
+local MINOR = 9
 local lib = LibStub:NewLibrary('LibEditMode', MINOR)
 if not lib then
 	-- this or a newer version is already loaded
@@ -107,6 +107,15 @@ local function normalizePosition(frame)
 	return point, x / scale, y / scale
 end
 
+local function updateParentPosition(parent, xDelta, yDelta)
+	local point, x, y = normalizePosition(parent)
+	x, y = x + (xDelta or 0), y + (yDelta or 0)
+	parent:ClearAllPoints()
+	parent:SetPoint(point, x, y)
+
+	internal:TriggerCallback(parent, point, x, y)
+end
+
 local function onDragStop(self)
 	local parent = self.parent
 	parent:StopMovingOrSizing()
@@ -114,11 +123,7 @@ local function onDragStop(self)
 	-- TODO: snap position to grid
 	-- FrameXML/EditModeUtil.lua
 
-	local point, x, y = normalizePosition(parent)
-	parent:ClearAllPoints()
-	parent:SetPoint(point, x, y)
-
-	internal:TriggerCallback(parent, point, x, y)
+	updateParentPosition(parent)
 
 	if self.isSelected then
 		internal.dialog:Update(self)
@@ -330,6 +335,14 @@ function internal:GetFrameButtons(frame)
 		return lib.frameButtons[frame], #lib.frameButtons[frame]
 	else
 		return nil, 0
+	end
+end
+
+function internal:MoveParent(selection, x, y)
+	updateParentPosition(selection.parent, x, y)
+
+	if selection.isSelected then
+		internal.dialog:Update(selection)
 	end
 end
 
