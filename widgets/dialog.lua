@@ -115,6 +115,9 @@ function dialogMixin:ResetPosition()
 	internal:TriggerCallback(parent, pos.point, pos.x, pos.y)
 end
 
+local BIG_STEP = 10
+local SMALL_STEP = 1
+
 function internal:CreateDialog()
 	local dialog = Mixin(CreateFrame('Frame', nil, UIParent, 'ResizeLayoutFrame'), dialogMixin)
 	dialog:SetSize(300, 350)
@@ -135,6 +138,25 @@ function internal:CreateDialog()
 	end)
 	dialog:SetScript('OnDragStop', function()
 		dialog:StopMovingOrSizing()
+	end)
+	dialog:SetScript('OnKeyDown', function(_, key)
+		if dialog.selection then
+			dialog:SetPropagateKeyboardInput(false)
+
+			if key == 'LEFT' then
+				internal:MoveParent(dialog.selection, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
+			elseif key == 'RIGHT' then
+				internal:MoveParent(dialog.selection, IsShiftKeyDown() and BIG_STEP or SMALL_STEP)
+			elseif key == 'UP' then
+				internal:MoveParent(dialog.selection, 0, IsShiftKeyDown() and BIG_STEP or SMALL_STEP)
+			elseif key == 'DOWN' then
+				internal:MoveParent(dialog.selection, 0, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
+			else
+				dialog:SetPropagateKeyboardInput(true)
+			end
+		else
+			dialog:SetPropagateKeyboardInput(true)
+		end
 	end)
 
 	local dialogTitle = dialog:CreateFontString(nil, nil, 'GameFontHighlightLarge')
