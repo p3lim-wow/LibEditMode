@@ -4,6 +4,12 @@ if minor > MINOR then
 	return
 end
 
+local CENTER = {
+	point = 'CENTER',
+	x = 0,
+	y = 0,
+}
+
 local internal = lib.internal
 
 -- replica of EditModeSystemSettingsDialog
@@ -47,8 +53,19 @@ function dialogMixin:UpdateSettings()
 	self.Settings.ResetButton:SetEnabled(num > 0)
 end
 
+local function isDefaultPosition(parent)
+	local point, _, _, x, y = parent:GetPoint()
+	local default = lib:GetFrameDefaultPosition(parent)
+	if not default then
+		default = CopyTable(CENTER)
+	end
+
+	return point == default.point and x == default.x and y == default.y
+end
+
 function dialogMixin:UpdateButtons()
-	local buttons, num = internal:GetFrameButtons(self.selection.parent)
+	local parent = self.selection.parent
+	local buttons, num = internal:GetFrameButtons(parent)
 	if num > 0 then
 		for index, data in next, buttons do
 			local button = internal:GetPool('button'):Acquire(self.Buttons)
@@ -56,6 +73,7 @@ function dialogMixin:UpdateButtons()
 			button:SetText(data.text)
 			button:SetOnClickHandler(data.click)
 			button:Show()
+			button:SetEnabled(true) -- reset from pool
 		end
 	end
 
@@ -64,6 +82,8 @@ function dialogMixin:UpdateButtons()
 	resetPosition:SetText(HUD_EDIT_MODE_RESET_POSITION)
 	resetPosition:SetOnClickHandler(GenerateClosure(self.ResetPosition, self))
 	resetPosition:Show()
+	resetPosition:SetEnabled(not isDefaultPosition(parent))
+	self.Settings.ResetPositionButton = resetPosition
 end
 
 function dialogMixin:ResetSettings()
@@ -81,15 +101,12 @@ function dialogMixin:ResetPosition()
 	local parent = self.selection.parent
 	local pos = lib:GetFrameDefaultPosition(parent)
 	if not pos then
-		pos = {
-			point = 'CENTER',
-			x = 0,
-			y = 0,
-		}
+		pos = CopyTable(CENTER)
 	end
 
 	parent:ClearAllPoints()
 	parent:SetPoint(pos.point, pos.x, pos.y)
+	self.Settings.ResetPositionButton:SetEnabled(false)
 
 	internal:TriggerCallback(parent, pos.point, pos.x, pos.y)
 end

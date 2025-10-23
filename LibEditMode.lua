@@ -119,6 +119,10 @@ local function onDragStop(self)
 	parent:SetPoint(point, x, y)
 
 	internal:TriggerCallback(parent, point, x, y)
+
+	if self.isSelected then
+		internal.dialog:Update(self)
+	end
 end
 
 local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSystem()
