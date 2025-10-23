@@ -115,6 +115,10 @@ local function updatePosition(selection, xDelta, yDelta)
 	parent:SetPoint(point, x, y)
 
 	internal:TriggerCallback(parent, point, x, y)
+
+	if selection.isSelected then
+		internal.dialog:Update(selection)
+	end
 end
 
 local function onDragStop(self)
@@ -125,10 +129,6 @@ local function onDragStop(self)
 	-- FrameXML/EditModeUtil.lua
 
 	updatePosition(self)
-
-	if self.isSelected then
-		internal.dialog:Update(self)
-	end
 end
 
 local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSystem()
@@ -341,10 +341,6 @@ end
 
 function internal:MoveParent(selection, x, y)
 	updatePosition(selection, x, y)
-
-	if selection.isSelected then
-		internal.dialog:Update(selection)
-	end
 end
 
 --[[ Types:header
