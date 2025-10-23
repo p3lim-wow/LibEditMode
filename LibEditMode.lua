@@ -133,6 +133,10 @@ local function updatePosition(selection, xDelta, yDelta)
 end
 
 local function onDragStop(self)
+	if InCombatLockdown() then
+		return
+	end
+
 	local parent = self.parent
 	parent:StopMovingOrSizing()
 	self:UnregisterEvent('PLAYER_REGEN_DISABLED')
