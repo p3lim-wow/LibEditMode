@@ -145,8 +145,12 @@ function internal:CreateDialog()
 		dialog:StopMovingOrSizing()
 	end)
 	dialog:SetScript('OnKeyDown', function(_, key)
+		if InCombatLockdown() then
+			return
+		end
+
 		if dialog.selection then
-			dialog:SetPropagateKeyboardInput(false)
+			dialog:SetPropagateKeyboardInput(false) -- protected
 
 			if key == 'LEFT' then
 				internal:MoveParent(dialog.selection, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
@@ -157,10 +161,10 @@ function internal:CreateDialog()
 			elseif key == 'DOWN' then
 				internal:MoveParent(dialog.selection, 0, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
 			else
-				dialog:SetPropagateKeyboardInput(true)
+				dialog:SetPropagateKeyboardInput(true) -- protected
 			end
 		else
-			dialog:SetPropagateKeyboardInput(true)
+			dialog:SetPropagateKeyboardInput(true) -- protected
 		end
 	end)
 
