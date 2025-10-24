@@ -1,4 +1,4 @@
-local MINOR = 9
+local MINOR = 10
 local lib = LibStub:NewLibrary('LibEditMode', MINOR)
 if not lib then
 	-- this or a newer version is already loaded
@@ -38,6 +38,7 @@ lib.anonCallbacksExit = lib.anonCallbacksExit or {}
 lib.anonCallbacksLayout = lib.anonCallbacksLayout or {}
 
 local function resetSelection()
+	local inCombat = InCombatLockdown and InCombatLockdown()
 	internal.dialog:Hide()
 
 	for frame, selection in next, lib.frameSelections do
@@ -48,19 +49,20 @@ local function resetSelection()
 		if not lib.isEditing then
 			selection:Hide()
 			selection.isSelected = false
-		else
+		elseif not inCombat then
 			selection:ShowHighlighted()
+		else
+			selection:Hide()
+			selection.isSelected = false
 		end
 	end
 end
 
 local function onDragStart(self)
-	if InCombatLockdown() then
-		-- TODO: maybe add a warning?
-		return
-	end
-
+	if InCombatLockdown and InCombatLockdown() then return end
+	if not (self.parent and self.parent:IsMovable()) then return end
 	self:RegisterEvent('PLAYER_REGEN_DISABLED')
+	self.combatDragActive = true
 	self.parent:StartMoving()
 end
 
@@ -113,46 +115,36 @@ local function normalizePosition(frame)
 	return point, x / scale, y / scale
 end
 
-local function updatePosition(selection, xDelta, yDelta)
-	if InCombatLockdown() then
-		-- TODO: maybe add a warning?
-		return
-	end
-
-	local parent = selection.parent
-	local point, x, y = normalizePosition(parent)
-	x, y = x + (xDelta or 0), y + (yDelta or 0)
-	parent:ClearAllPoints()
-	parent:SetPoint(point, x, y)
-
-	internal:TriggerCallback(parent, point, x, y)
-
-	if selection.isSelected then
-		internal.dialog:Update(selection)
-	end
-end
-
 local function onDragStop(self)
-	if InCombatLockdown() then
-		return
-	end
-
 	local parent = self.parent
-	parent:StopMovingOrSizing()
-	self:UnregisterEvent('PLAYER_REGEN_DISABLED')
+	if parent then parent:StopMovingOrSizing() end
+	if self.combatDragActive then
+		self:UnregisterEvent('PLAYER_REGEN_DISABLED')
+		self.combatDragActive = nil
+	end
+	if InCombatLockdown and InCombatLockdown() then return end
+	if not (parent and parent.IsMovable and parent:IsMovable()) then return end
 
 	-- TODO: snap position to grid
 	-- FrameXML/EditModeUtil.lua
 
-	updatePosition(self)
+	local point, x, y = normalizePosition(parent)
+	parent:ClearAllPoints()
+	parent:SetPoint(point, x, y)
+
+	internal:TriggerCallback(parent, point, x, y)
+end
+
+local function onSelectionEvent(self, event)
+	if event == 'PLAYER_REGEN_DISABLED' then
+		onDragStop(self)
+		self:Hide()
+		self.isSelected = false
+	end
 end
 
 local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSystem()
-	if InCombatLockdown() then
-		-- TODO: maybe add a warning?
-		return
-	end
-
+	if InCombatLockdown and InCombatLockdown() then return end
 	resetSelection()
 	EditModeManagerFrame:ClearSelectedSystem() -- possible taint
 
@@ -215,7 +207,6 @@ function lib:AddFrame(frame, callback, default)
 	selection:SetScript('OnMouseDown', onMouseDown)
 	selection:SetScript('OnDragStart', onDragStart)
 	selection:SetScript('OnDragStop', onDragStop)
-	selection:SetScript('OnEvent', onDragStop)
 	selection:Hide()
 
 	if select(4, GetBuildInfo()) >= 110200 then
@@ -231,6 +222,7 @@ function lib:AddFrame(frame, callback, default)
 	lib.frameSelections[frame] = selection
 	lib.frameCallbacks[frame] = callback
 	lib.frameDefaults[frame] = default
+	selection:SetScript('OnEvent', onSelectionEvent)
 
 	if not internal.dialog then
 		internal.dialog = internal:CreateDialog()
@@ -359,10 +351,6 @@ function internal:GetFrameButtons(frame)
 	else
 		return nil, 0
 	end
-end
-
-function internal:MoveParent(selection, x, y)
-	updatePosition(selection, x, y)
 end
 
 --[[ Types:header
