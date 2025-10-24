@@ -116,13 +116,13 @@ local function normalizePosition(frame)
 end
 
 local function onDragStop(self)
+	if InCombatLockdown and InCombatLockdown() then return end
 	local parent = self.parent
 	if parent then parent:StopMovingOrSizing() end
 	if self.combatDragActive then
 		self:UnregisterEvent('PLAYER_REGEN_DISABLED')
 		self.combatDragActive = nil
 	end
-	if InCombatLockdown and InCombatLockdown() then return end
 	if not (parent and parent.IsMovable and parent:IsMovable()) then return end
 
 	-- TODO: snap position to grid
