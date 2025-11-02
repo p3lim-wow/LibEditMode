@@ -397,6 +397,15 @@ Depending on the setting type there are additional required and optional entries
 - `generator` signature is `(dropdown, rootDescription, settingObject)` - `settingObject` being the addition to the default arguments.
 	- getters and setters are not handled using `generator`, and must be handled by the layout
 
+## DropdownOption
+
+Table containing the following entries:
+
+| key     | value                                                              | type    | required |
+|:--------|:-------------------------------------------------------------------|---------|:---------|
+| text    | text rendered in the dropdown                                      | string  | yes      |
+| isRadio | turns the dropdown entry into a Radio button, otherwise a Checkbox | boolean | no       |
+
 ### Slider
 
 | key       | value                             | type     | required | default |
@@ -416,15 +425,6 @@ Table containing the following entries:
 |:------|:--------------------------------|----------|:---------|
 | text  | text rendered on the button     | string   | yes      |
 | click | callback when button is clicked | function | yes      |
-
-## DropdownOption
-
-Table containing the following entries:
-
-| key     | value                                                              | type    | required |
-|:--------|:-------------------------------------------------------------------|---------|:---------|
-| text    | text rendered in the dropdown                                      | string  | yes      |
-| isRadio | turns the dropdown entry into a Radio button, otherwise a Checkbox | boolean | no       |
 
 ## SettingType
 Convenient shorthand for `Enum.EditModeSettingDisplayType`.
