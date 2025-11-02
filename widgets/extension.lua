@@ -26,8 +26,8 @@ function extensionMixin:Update(systemID)
 	-- reset position
 	if not self:IsShown() then
 		self:ClearAllPoints()
-		self:SetPoint('TOPLEFT', EditModeSystemSettingsDialog, 'BOTTOMLEFT')
-		self:SetPoint('TOPRIGHT', EditModeSystemSettingsDialog, 'BOTTOMRIGHT')
+		self:SetPoint('TOPLEFT', EditModeSystemSettingsDialog, 'BOTTOMLEFT', 0, 16)
+		self:SetPoint('TOPRIGHT', EditModeSystemSettingsDialog, 'BOTTOMRIGHT', 0, 16)
 	end
 
 	-- show and update layout
@@ -96,7 +96,7 @@ function internal:CreateExtension()
 	extension:SetSize(64, 64)
 	extension:SetFrameStrata('DIALOG')
 	extension:SetClampedToScreen(true)
-	extension:SetFrameLevel(200)
+	extension:SetFrameLevel(300)
 	extension:Hide()
 	extension.widthPadding = 40
 	extension.heightPadding = 40
