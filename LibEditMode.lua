@@ -37,9 +37,20 @@ lib.anonCallbacksEnter = lib.anonCallbacksEnter or {}
 lib.anonCallbacksExit = lib.anonCallbacksExit or {}
 lib.anonCallbacksLayout = lib.anonCallbacksLayout or {}
 
-local function resetSelection()
-	internal.dialog:Hide()
+lib.systemSettings = lib.systemSettings or {}
+lib.systemButtons = lib.systemButtons or {}
 
+local function resetDialogs()
+	if internal.dialog then
+		internal.dialog:Hide()
+	end
+
+	if internal.extension then
+		internal.extension:Hide()
+	end
+end
+
+local function resetSelection()
 	for frame, selection in next, lib.frameSelections do
 		if selection.isSelected then
 			frame:SetMovable(false)
@@ -153,6 +164,7 @@ local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSy
 		return
 	end
 
+	resetDialogs()
 	resetSelection()
 	EditModeManagerFrame:ClearSelectedSystem() -- possible taint
 
@@ -166,6 +178,7 @@ end
 local function onEditModeEnter()
 	lib.isEditing = true
 
+	resetDialogs()
 	resetSelection()
 
 	for _, callback in next, lib.anonCallbacksEnter do
@@ -176,6 +189,7 @@ end
 local function onEditModeExit()
 	lib.isEditing = false
 
+	resetDialogs()
 	resetSelection()
 
 	for _, callback in next, lib.anonCallbacksExit do
@@ -194,6 +208,33 @@ local function onEditModeChanged(_, layoutInfo)
 
 		-- TODO: we should update the position of the button here, let the user not deal with that
 	end
+end
+
+local isManagerHooked = false
+
+local function hookManager()
+	-- listen for layout changes
+	EventRegistry:RegisterFrameEventAndCallback('EDIT_MODE_LAYOUTS_UPDATED', onEditModeChanged)
+
+	-- hook EditMode shown state, since QuickKeybindMode will hide/show EditMode
+	EditModeManagerFrame:HookScript('OnShow', onEditModeEnter)
+	EditModeManagerFrame:HookScript('OnHide', onEditModeExit)
+
+	-- we don't want any custom frames dangling around
+	EditModeSystemSettingsDialog:HookScript('OnHide', resetDialogs)
+
+	-- unselect our selections whenever a system is selected and try to add an extension
+	hooksecurefunc(EditModeManagerFrame, 'SelectSystem', function(_, systemFrame)
+		resetDialogs()
+		resetSelection()
+
+		local systemID = systemFrame.system
+		if lib.systemSettings[systemID] or lib.systemButtons[systemID] then
+			internal.extension:Update(systemID)
+		end
+	end)
+
+	isManagerHooked = true
 end
 
 --[[ LibEditMode:AddFrame(_frame, callback, default_)
@@ -238,17 +279,9 @@ function lib:AddFrame(frame, callback, default)
 			resetSelection()
 		end)
 
-		-- listen for layout changes
-		EventRegistry:RegisterFrameEventAndCallback('EDIT_MODE_LAYOUTS_UPDATED', onEditModeChanged)
-
-		-- hook EditMode shown state, since QuickKeybindMode will hide/show EditMode
-		EditModeManagerFrame:HookScript('OnShow', onEditModeEnter)
-		EditModeManagerFrame:HookScript('OnHide', onEditModeExit)
-
-		-- unselect our selections whenever a system is selected
-		hooksecurefunc(EditModeManagerFrame, 'SelectSystem', function()
-			resetSelection()
-		end)
+		if not isManagerHooked then
+			hookManager()
+		end
 	end
 end
 
@@ -266,6 +299,31 @@ function lib:AddFrameSettings(frame, settings)
 	lib.frameSettings[frame] = settings
 end
 
+--[[ LibEditMode:AddSystemSettings(_systemID, settings_)
+Register extra settings that will be displayed in an extension attached to the dialog in the Edit Mode.
+
+* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
+* `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
+--]]
+function lib:AddSystemSettings(systemID, settings)
+	if not lib.systemSettings[systemID] then
+		lib.systemSettings[systemID] = {}
+	end
+
+	-- while not ideal allow multiple addons to add their settings
+	for _, setting in next, settings do
+		table.insert(lib.systemSettings[systemID], setting)
+	end
+
+	if not internal.extension then
+		internal.extension = internal:CreateExtension()
+	end
+
+	if not isManagerHooked then
+		hookManager()
+	end
+end
+
 --[[ LibEditMode:AddFrameSettingsButton(_frame, data_)
 Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
 
@@ -278,6 +336,30 @@ function lib:AddFrameSettingsButton(frame, data)
 	end
 
 	table.insert(lib.frameButtons[frame], data)
+end
+
+--[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons_)
+Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
+
+* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
+* `buttons`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
+--]]
+function lib:AddSystemSettingsButtons(systemID, buttons)
+	if not lib.systemButtons[systemID] then
+		lib.systemButtons[systemID] = {}
+	end
+
+	for _, button in next, buttons do
+		table.insert(lib.systemButtons[systemID], button)
+	end
+
+	if not internal.extension then
+		internal.extension = internal:CreateExtension()
+	end
+
+	if not isManagerHooked then
+		hookManager()
+	end
 end
 
 --[[ LibEditMode:RegisterCallback(_event, callback_)
@@ -363,6 +445,22 @@ end
 
 function internal:MoveParent(selection, x, y)
 	updatePosition(selection, x, y)
+end
+
+function internal:GetSystemSettings(systemID)
+	if lib.systemSettings[systemID] then
+		return lib.systemSettings[systemID], #lib.systemSettings[systemID]
+	else
+		return nil, 0
+	end
+end
+
+function internal:GetSystemSettingsButtons(systemID)
+	if lib.systemButtons[systemID] then
+		return lib.systemButtons[systemID], #lib.systemButtons[systemID]
+	else
+		return nil, 0
+	end
 end
 
 --[[ Types:header

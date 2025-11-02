@@ -24,6 +24,7 @@ read_globals = {
 	-- FrameXML objects
 	'CreateUnsecuredObjectPool',
 	'EditModeManagerFrame',
+	'EditModeSystemSettingsDialog',
 	'EventRegistry',
 	'MinimalSliderWithSteppersMixin',
 	'UIParent',
