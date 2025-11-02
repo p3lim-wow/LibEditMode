@@ -303,7 +303,7 @@ end
 
 > Deprecated. Please use [`LibEditMode:AddFrameSettingsButtons(frame, buttons)`](#libeditmodeaddframesettingsbuttonsframe-buttons) instead.
 
-Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
+Register extra button that will be displayed in a dialog attached to the frame in the Edit Mode.
 
 * `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
 * `data`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
@@ -333,7 +333,7 @@ function lib:AddFrameSettingsButtons(frame, buttons)
 end
 
 --[[ LibEditMode:AddSystemSettings(_systemID, settings_)
-Register extra settings that will be displayed in an extension attached to the dialog in the Edit Mode.
+Register extra settings for a Blizzard system, it will be displayed in an dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
@@ -358,7 +358,7 @@ function lib:AddSystemSettings(systemID, settings)
 end
 
 --[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons_)
-Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
+Register extra buttons for a Blizzard system, it will be displayed in a dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `buttons`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
