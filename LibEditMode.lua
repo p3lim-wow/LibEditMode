@@ -243,6 +243,7 @@ Register a frame to be controlled by the Edit Mode.
 * `frame`: frame widget to be controlled
 * `callback`: callback that triggers whenever the frame has been repositioned
 * `default`: table containing the default position of the frame
+* `name`: name of the system, if nil, the frame's name will be used
 
 The `default` table must contain the following entries:
 
@@ -250,7 +251,7 @@ The `default` table must contain the following entries:
 * `x`: horizontal offset from the anchor point _(number)_
 * `y`: vertical offset from the anchor point _(number)_
 --]]
-function lib:AddFrame(frame, callback, default)
+function lib:AddFrame(frame, callback, default, name)
 	local selection = CreateFrame('Frame', nil, frame, 'EditModeSystemSelectionTemplate')
 	selection:SetAllPoints()
 	selection:SetScript('OnMouseDown', onMouseDown)
@@ -259,15 +260,12 @@ function lib:AddFrame(frame, callback, default)
 	selection:SetScript('OnEvent', onDragStop)
 	selection:Hide()
 
-	if select(4, GetBuildInfo()) >= 110200 then
-		-- 11.2 requires a system name to work correctly, we'll fake it
-		selection.system = {}
-		selection.system.GetSystemName = function()
-			return frame.editModeName or frame:GetName()
+	-- as of 11.2 the template requires a system name to work correctly
+	selection.system = {
+		GetSystemName = function()
+			return name or frame.editModeName or frame:GetName()
 		end
-	else
-		selection.Label:SetText(frame.editModeName or frame:GetName())
-	end
+	}
 
 	lib.frameSelections[frame] = selection
 	lib.frameCallbacks[frame] = callback

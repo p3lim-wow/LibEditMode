@@ -17,7 +17,7 @@ local dialogMixin = {}
 function dialogMixin:Update(selection)
 	self.selection = selection
 
-	self.Title:SetText(selection.parent.editModeName or selection.parent:GetName())
+	self.Title:SetText(selection.system:GetSystemName())
 	self:UpdateSettings()
 	self:UpdateButtons()
 
