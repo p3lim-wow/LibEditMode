@@ -87,7 +87,7 @@ function dialogMixin:UpdateButtons()
 	resetPosition:SetOnClickHandler(GenerateClosure(self.ResetPosition, self))
 	resetPosition:Show()
 	resetPosition:SetEnabled(not isDefaultPosition(parent))
-	self.Settings.ResetPositionButton = resetPosition
+	self.Buttons.ResetPositionButton = resetPosition
 end
 
 function dialogMixin:ResetSettings()
