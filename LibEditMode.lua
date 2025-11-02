@@ -324,7 +324,15 @@ function lib:AddSystemSettings(systemID, settings)
 	end
 end
 
--- deprecated
+--[[ LibEditMode:AddFrameSettingsButton(_frame, data_)
+
+> Deprecated. Please use [`LibEditMode:AddFrameSettingsButtons(frame, buttons)`](#libeditmodeaddframesettingsbuttonsframe-buttons) instead.
+
+Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
+
+* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
+* `data`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
+--]]
 function lib:AddFrameSettingsButton(frame, data)
 	if not lib.frameButtons[frame] then
 		lib.frameButtons[frame] = {}
