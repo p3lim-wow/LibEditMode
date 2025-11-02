@@ -299,31 +299,6 @@ function lib:AddFrameSettings(frame, settings)
 	lib.frameSettings[frame] = settings
 end
 
---[[ LibEditMode:AddSystemSettings(_systemID, settings_)
-Register extra settings that will be displayed in an extension attached to the dialog in the Edit Mode.
-
-* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
-* `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
---]]
-function lib:AddSystemSettings(systemID, settings)
-	if not lib.systemSettings[systemID] then
-		lib.systemSettings[systemID] = {}
-	end
-
-	-- while not ideal allow multiple addons to add their settings
-	for _, setting in next, settings do
-		table.insert(lib.systemSettings[systemID], setting)
-	end
-
-	if not internal.extension then
-		internal.extension = internal:CreateExtension()
-	end
-
-	if not isManagerHooked then
-		hookManager()
-	end
-end
-
 --[[ LibEditMode:AddFrameSettingsButton(_frame, data_)
 
 > Deprecated. Please use [`LibEditMode:AddFrameSettingsButtons(frame, buttons)`](#libeditmodeaddframesettingsbuttonsframe-buttons) instead.
@@ -354,6 +329,31 @@ function lib:AddFrameSettingsButtons(frame, buttons)
 
 	for _, button in next, buttons do
 		table.insert(lib.frameButtons[frame], button)
+	end
+end
+
+--[[ LibEditMode:AddSystemSettings(_systemID, settings_)
+Register extra settings that will be displayed in an extension attached to the dialog in the Edit Mode.
+
+* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
+* `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
+--]]
+function lib:AddSystemSettings(systemID, settings)
+	if not lib.systemSettings[systemID] then
+		lib.systemSettings[systemID] = {}
+	end
+
+	-- while not ideal allow multiple addons to add their settings
+	for _, setting in next, settings do
+		table.insert(lib.systemSettings[systemID], setting)
+	end
+
+	if not internal.extension then
+		internal.extension = internal:CreateExtension()
+	end
+
+	if not isManagerHooked then
+		hookManager()
 	end
 end
 
