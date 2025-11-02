@@ -324,18 +324,29 @@ function lib:AddSystemSettings(systemID, settings)
 	end
 end
 
---[[ LibEditMode:AddFrameSettingsButton(_frame, data_)
-Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
-
-* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
-* `data`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
---]]
+-- deprecated
 function lib:AddFrameSettingsButton(frame, data)
 	if not lib.frameButtons[frame] then
 		lib.frameButtons[frame] = {}
 	end
 
 	table.insert(lib.frameButtons[frame], data)
+end
+
+--[[ LibEditMode:AddFrameSettingsButtons(_frame, buttons_)
+Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
+
+* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
+* `buttons`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
+--]]
+function lib:AddFrameSettingsButtons(frame, buttons)
+	if not lib.frameButtons[frame] then
+		lib.frameButtons[frame] = {}
+	end
+
+	for _, button in next, buttons do
+		table.insert(lib.frameButtons[frame], button)
+	end
 end
 
 --[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons_)
