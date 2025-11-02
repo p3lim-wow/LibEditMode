@@ -117,7 +117,7 @@ function dialogMixin:ResetPosition()
 
 	parent:ClearAllPoints()
 	parent:SetPoint(pos.point, pos.x, pos.y)
-	self.Settings.ResetPositionButton:SetEnabled(false)
+	self.Buttons.ResetPositionButton:SetEnabled(false)
 
 	internal:TriggerCallback(parent, pos.point, pos.x, pos.y)
 end
