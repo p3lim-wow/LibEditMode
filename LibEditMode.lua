@@ -237,7 +237,7 @@ local function hookManager()
 	isManagerHooked = true
 end
 
---[[ LibEditMode:AddFrame(_frame, callback, default_)
+--[[ LibEditMode:AddFrame(_frame, callback, default_) ![](https://img.shields.io/badge/function-blue)
 Register a frame to be controlled by the Edit Mode.
 
 * `frame`: frame widget to be controlled
@@ -285,7 +285,7 @@ function lib:AddFrame(frame, callback, default)
 	end
 end
 
---[[ LibEditMode:AddFrameSettings(_frame, settings_)
+--[[ LibEditMode:AddFrameSettings(_frame, settings_) ![](https://img.shields.io/badge/function-blue)
 Register extra settings that will be displayed in a dialog attached to the frame in the Edit Mode.
 
 * `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
@@ -299,7 +299,7 @@ function lib:AddFrameSettings(frame, settings)
 	lib.frameSettings[frame] = settings
 end
 
---[[ LibEditMode:AddFrameSettingsButton(_frame, data_)
+--[[ LibEditMode:AddFrameSettingsButton(_frame, data_) ![](https://img.shields.io/badge/function-blue)
 
 > Deprecated. Please use [`LibEditMode:AddFrameSettingsButtons(frame, buttons)`](#libeditmodeaddframesettingsbuttonsframe-buttons) instead.
 
@@ -316,7 +316,7 @@ function lib:AddFrameSettingsButton(frame, data)
 	table.insert(lib.frameButtons[frame], data)
 end
 
---[[ LibEditMode:AddFrameSettingsButtons(_frame, buttons_)
+--[[ LibEditMode:AddFrameSettingsButtons(_frame, buttons_) ![](https://img.shields.io/badge/function-blue)
 Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
 
 * `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
@@ -332,7 +332,7 @@ function lib:AddFrameSettingsButtons(frame, buttons)
 	end
 end
 
---[[ LibEditMode:AddSystemSettings(_systemID, settings_)
+--[[ LibEditMode:AddSystemSettings(_systemID, settings_) ![](https://img.shields.io/badge/function-blue)
 Register extra settings for a Blizzard system, it will be displayed in an dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
@@ -357,7 +357,7 @@ function lib:AddSystemSettings(systemID, settings)
 	end
 end
 
---[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons_)
+--[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons_) ![](https://img.shields.io/badge/function-blue)
 Register extra buttons for a Blizzard system, it will be displayed in a dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
@@ -381,7 +381,7 @@ function lib:AddSystemSettingsButtons(systemID, buttons)
 	end
 end
 
---[[ LibEditMode:RegisterCallback(_event, callback_)
+--[[ LibEditMode:RegisterCallback(_event, callback_) ![](https://img.shields.io/badge/function-blue)
 Register extra callbacks whenever an event within the Edit Mode triggers.
 
 * `event`: event name _(string)_
@@ -410,7 +410,7 @@ function lib:RegisterCallback(event, callback)
 	end
 end
 
---[[ LibEditMode:GetActiveLayoutName()
+--[[ LibEditMode:GetActiveLayoutName() ![](https://img.shields.io/badge/function-blue)
 Returns the active Edit Mode layout name.
 
 This will not return valid data until after the layout has been loaded from the server.  
@@ -420,14 +420,14 @@ function lib:GetActiveLayoutName()
 	return lib.activeLayoutName
 end
 
---[[ LibEditMode:IsInEditMode()
+--[[ LibEditMode:IsInEditMode() ![](https://img.shields.io/badge/function-blue)
 Returns whether the Edit Mode is currently active.
 --]]
 function lib:IsInEditMode()
 	return not not lib.isEditing
 end
 
---[[ LibEditMode:GetFrameDefaultPosition(_frame_)
+--[[ LibEditMode:GetFrameDefaultPosition(_frame_) ![](https://img.shields.io/badge/function-blue)
 Returns the default position table registered with the frame.
 
 * `frame`: registered frame to return positions for
@@ -484,7 +484,7 @@ end
 
 --[[ Types:header
 
-## SettingObject
+## SettingObject ![](https://img.shields.io/badge/object-teal)
 
 Table containing the following entries:
 
@@ -501,7 +501,7 @@ Table containing the following entries:
 
 Depending on the setting type there are additional required and optional entries:
 
-### Dropdown
+### Dropdown ![](https://img.shields.io/badge/object-teal)
 
 | key       | value                                                                                                                 | type     | required |
 |:----------|:----------------------------------------------------------------------------------------------------------------------|:---------|:---------|
@@ -514,7 +514,7 @@ Depending on the setting type there are additional required and optional entries
 - `generator` signature is `(dropdown, rootDescription, settingObject)` - `settingObject` being the addition to the default arguments.
 	- getters and setters are not handled using `generator`, and must be handled by the layout
 
-## DropdownOption
+## DropdownOption ![](https://img.shields.io/badge/object-teal)
 
 Table containing the following entries:
 
@@ -523,7 +523,7 @@ Table containing the following entries:
 | text    | text rendered in the dropdown                                      | string  | yes      |
 | isRadio | turns the dropdown entry into a Radio button, otherwise a Checkbox | boolean | no       |
 
-### Slider
+### Slider ![](https://img.shields.io/badge/object-teal)
 
 | key       | value                             | type     | required | default |
 |:----------|:----------------------------------|:---------|:---------|:--------|
@@ -534,7 +534,7 @@ Table containing the following entries:
 
 - The formatter passes `value` as the sole argument and expects a number value in return.
 
-## ButtonObject
+## ButtonObject ![](https://img.shields.io/badge/object-teal)
 
 Table containing the following entries:
 
@@ -543,7 +543,7 @@ Table containing the following entries:
 | text  | text rendered on the button     | string   | yes      |
 | click | callback when button is clicked | function | yes      |
 
-## SettingType
+## SettingType ![](https://img.shields.io/badge/object-teal)
 Table containing available setting types.
 
 One of:
