@@ -21,7 +21,7 @@ function extensionMixin:Update(systemID)
 		self.Buttons:SetPoint('TOP', self.Settings, 'BOTTOM', 0, -2)
 	end
 
-	self:UpdateButtons()
+	self:UpdateButtons(numSettings)
 
 	-- reset position
 	if not self:IsShown() then
@@ -53,16 +53,20 @@ function extensionMixin:UpdateSettings()
 	self.Settings.ResetButton.layoutIndex = num + 1
 	self.Settings.ResetButton.ignoreInLayout = isEmpty
 	self.Settings.ResetButton:SetEnabled(not isEmpty)
-	self.Settings.Divider.layoutIndex = num + 2
-	self.Settings.Divider.ignoreInLayout = isEmpty
 
 	return num
 end
 
-function extensionMixin:UpdateButtons()
+function extensionMixin:UpdateButtons(numSettings)
 	local buttons, num = internal:GetSystemSettingsButtons(self.systemID)
 	local isEmpty = num == 0
 	if not isEmpty then
+		if numSettings > 0 then
+			local divider = internal:GetPool(lib.SettingType.Divider):Acquire(self.Settings)
+			divider.layoutIndex = numSettings + 2 -- + 1 is for the reset button
+			divider:Show()
+		end
+
 		for index, data in next, buttons do
 			local button = internal:GetPool('button'):Acquire(self.Buttons)
 			button.layoutIndex = index
@@ -74,7 +78,6 @@ function extensionMixin:UpdateButtons()
 	end
 
 	self.Buttons.ignoreInLayout = isEmpty
-	self.Settings.Divider.ignoreInLayout = isEmpty
 end
 
 function extensionMixin:ResetSettings()
@@ -113,11 +116,6 @@ function internal:CreateExtension()
 	resetSettingsButton:SetText(RESET_TO_DEFAULT)
 	resetSettingsButton:SetOnClickHandler(GenerateClosure(extension.ResetSettings, extension))
 	extensionSettings.ResetButton = resetSettingsButton
-
-	local divider = extensionSettings:CreateTexture(nil, 'ARTWORK')
-	divider:SetSize(330, 16)
-	divider:SetTexture([[Interface\FriendsFrame\UI-FriendsFrame-OnlineDivider]])
-	extensionSettings.Divider = divider
 
 	local extensionButtons = CreateFrame('Frame', nil, extension, 'VerticalLayoutFrame')
 	extensionButtons.spacing = 2
