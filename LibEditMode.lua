@@ -306,7 +306,7 @@ end
 Register extra button that will be displayed in a dialog attached to the frame in the Edit Mode.
 
 * `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
-* `data`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
+* `data`: [ButtonObject](Types#buttonobject) _(table)_
 --]]
 function lib:AddFrameSettingsButton(frame, data)
 	if not lib.frameButtons[frame] then
