@@ -5,6 +5,9 @@ on:
       - master
     tags-ignore:
       - '**'
+    paths:
+      - '!.github/'
+      - '!scripts/'
 
 jobs:
   alpha:

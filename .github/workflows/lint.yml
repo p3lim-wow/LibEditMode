@@ -1,8 +1,16 @@
 name: Lint
 
 on:
-  - push
-  - pull_request
+  push:
+    branches:
+      - master
+    tags-ignore:
+      - '**'
+    paths:
+      - '**.lua'
+  pull_request:
+    paths:
+      - '**.lua'
 
 jobs:
   lint:

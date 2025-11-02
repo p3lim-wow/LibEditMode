@@ -1,5 +1,8 @@
 name: Generate docs
-on: push
+on:
+  push:
+    paths:
+      - '**.lua'
 
 jobs:
   docs:
