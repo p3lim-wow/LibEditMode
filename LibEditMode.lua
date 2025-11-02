@@ -301,7 +301,7 @@ end
 
 --[[ LibEditMode:AddFrameSettingsButton(_frame, data_) ![](https://img.shields.io/badge/function-blue)
 
-> Deprecated. Please use [`LibEditMode:AddFrameSettingsButtons(frame, buttons)`](#libeditmodeaddframesettingsbuttonsframe-buttons) instead.
+> :warning: Deprecated. Please use [`LibEditMode:AddFrameSettingsButtons(frame, buttons)`](#libeditmodeaddframesettingsbuttonsframe-buttons) instead.
 
 Register extra button that will be displayed in a dialog attached to the frame in the Edit Mode.
 
