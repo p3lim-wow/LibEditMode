@@ -26,7 +26,8 @@ function extensionMixin:Update(systemID)
 	-- reset position
 	if not self:IsShown() then
 		self:ClearAllPoints()
-		self:SetPoint('TOPLEFT', EditModeSystemSettingsDialog, 'BOTTOMLEFT', 0, 0)
+		self:SetPoint('TOPLEFT', EditModeSystemSettingsDialog, 'BOTTOMLEFT')
+		self:SetPoint('TOPRIGHT', EditModeSystemSettingsDialog, 'BOTTOMRIGHT')
 	end
 
 	-- show and update layout
