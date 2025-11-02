@@ -2,6 +2,7 @@
 	<Script file='LibEditMode.lua'/>
 	<Script file='pools.lua'/>
 	<Script file='widgets\dialog.lua'/>
+	<Script file='widgets\divider.lua'/>
 	<Script file='widgets\dropdown.lua'/>
 	<Script file='widgets\slider.lua'/>
 	<Script file='widgets\checkbox.lua'/>

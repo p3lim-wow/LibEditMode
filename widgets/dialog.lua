@@ -94,7 +94,9 @@ function dialogMixin:ResetSettings()
 	local settings, num = internal:GetFrameSettings(self.selection.parent)
 	if num > 0 then
 		for _, data in next, settings do
-			data.set(lib.activeLayoutName, data.default)
+			if data.set then
+				data.set(lib.activeLayoutName, data.default)
+			end
 		end
 
 		self:Update(self.selection)

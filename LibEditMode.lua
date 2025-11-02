@@ -427,11 +427,12 @@ Table containing the following entries:
 | isRadio | turns the dropdown entry into a Radio button, otherwise a Checkbox | boolean | no       |
 
 ## SettingType
-Convenient shorthand for `Enum.EditModeSettingDisplayType`.
+Table containing available setting types.
 
 One of:
 - `Dropdown`
 - `Checkbox`
 - `Slider`
+- `Divider`
 --]]
 lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)
