@@ -49,3 +49,28 @@ LEM:AddFrameSettings(button, {
 		end,
 	}
 })
+
+LEM:AddSystemSettings(Enum.EditModeSystem.ObjectiveTracker, {
+    {
+        name = "Example Setting 1",
+        kind = LEM.SettingType.Checkbox,
+        default = 1,
+        get = function(layoutName)
+            return true
+        end,
+        set = function(layoutName, value)
+        	-- do something
+        end,
+    },
+    {
+        name = "Example Setting 2",
+        kind = LEM.SettingType.Checkbox,
+        default = 1,
+        get = function(layoutName)
+            return true
+        end,
+        set = function(layoutName, value)
+            -- do something
+        end,
+    },
+})
