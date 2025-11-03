@@ -522,6 +522,7 @@ Table containing the following entries:
 | key     | value                                                              | type    | required |
 |:--------|:-------------------------------------------------------------------|---------|:---------|
 | text    | text rendered in the dropdown                                      | string  | yes      |
+| value   | value the text represents, defaults to the text if not provided    | any     | no       |
 | isRadio | turns the dropdown entry into a Radio button, otherwise a Checkbox | boolean | no       |
 
 ### Slider ![](https://img.shields.io/badge/object-teal)
