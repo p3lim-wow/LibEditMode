@@ -33,13 +33,13 @@ function dropdownMixin:Setup(data)
 					rootDescription:CreateRadio(value.text, get, set, {
 						get = data.get,
 						set = data.set,
-						value = value.text,
+						value = value.value or value.text,
 					})
 				else
 					rootDescription:CreateCheckbox(value.text, get, set, {
 						get = data.get,
 						set = data.set,
-						value = value.text
+						value = value.value or value.text,
 					})
 				end
 			end
