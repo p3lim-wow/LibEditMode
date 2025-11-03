@@ -234,6 +234,9 @@ local function hookManager()
 		end
 	end)
 
+	-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
+	onEditModeChanged(nil, C_EditMode.GetLayouts())
+
 	isManagerHooked = true
 end
 
