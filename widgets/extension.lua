@@ -23,13 +23,6 @@ function extensionMixin:Update(systemID)
 
 	self:UpdateButtons(numSettings)
 
-	-- reset position
-	if not self:IsShown() then
-		self:ClearAllPoints()
-		self:SetPoint('TOPLEFT', EditModeSystemSettingsDialog, 'BOTTOMLEFT', 0, 16)
-		self:SetPoint('TOPRIGHT', EditModeSystemSettingsDialog, 'BOTTOMRIGHT', 0, 16)
-	end
-
 	-- show and update layout
 	self:Show()
 	self:Layout()
@@ -97,6 +90,7 @@ end
 function internal:CreateExtension()
 	local extension = Mixin(CreateFrame('Frame', nil, UIParent, 'ResizeLayoutFrame'), extensionMixin)
 	extension:SetSize(64, 64)
+	extension:SetPoint('TOP', EditModeSystemSettingsDialog, 'BOTTOM', 0, 0)
 	extension:SetFrameStrata('DIALOG')
 	extension:SetClampedToScreen(true)
 	extension:SetFrameLevel(300)
