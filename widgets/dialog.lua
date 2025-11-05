@@ -125,6 +125,30 @@ end
 local BIG_STEP = 10
 local SMALL_STEP = 1
 
+function dialogMixin:OnKeyDown(key)
+	if InCombatLockdown() then
+		return
+	end
+
+	if self.selection then
+		self:SetPropagateKeyboardInput(false) -- protected
+
+		if key == 'LEFT' then
+			internal:MoveParent(self.selection, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
+		elseif key == 'RIGHT' then
+			internal:MoveParent(self.selection, IsShiftKeyDown() and BIG_STEP or SMALL_STEP)
+		elseif key == 'UP' then
+			internal:MoveParent(self.selection, 0, IsShiftKeyDown() and BIG_STEP or SMALL_STEP)
+		elseif key == 'DOWN' then
+			internal:MoveParent(self.selection, 0, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
+		else
+			self:SetPropagateKeyboardInput(true) -- protected
+		end
+	else
+		self:SetPropagateKeyboardInput(true) -- protected
+	end
+end
+
 function internal:CreateDialog()
 	local dialog = Mixin(CreateFrame('Frame', nil, UIParent, 'ResizeLayoutFrame'), dialogMixin)
 	dialog:SetSize(300, 350)
@@ -140,35 +164,9 @@ function internal:CreateDialog()
 	dialog:SetClampedToScreen(true)
 	dialog:SetDontSavePosition(true)
 	dialog:RegisterForDrag('LeftButton')
-	dialog:SetScript('OnDragStart', function()
-		dialog:StartMoving()
-	end)
-	dialog:SetScript('OnDragStop', function()
-		dialog:StopMovingOrSizing()
-	end)
-	dialog:SetScript('OnKeyDown', function(_, key)
-		if InCombatLockdown() then
-			return
-		end
-
-		if dialog.selection then
-			dialog:SetPropagateKeyboardInput(false) -- protected
-
-			if key == 'LEFT' then
-				internal:MoveParent(dialog.selection, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
-			elseif key == 'RIGHT' then
-				internal:MoveParent(dialog.selection, IsShiftKeyDown() and BIG_STEP or SMALL_STEP)
-			elseif key == 'UP' then
-				internal:MoveParent(dialog.selection, 0, IsShiftKeyDown() and BIG_STEP or SMALL_STEP)
-			elseif key == 'DOWN' then
-				internal:MoveParent(dialog.selection, 0, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
-			else
-				dialog:SetPropagateKeyboardInput(true) -- protected
-			end
-		else
-			dialog:SetPropagateKeyboardInput(true) -- protected
-		end
-	end)
+	dialog:SetScript('OnDragStart', dialog.StartMoving)
+	dialog:SetScript('OnDragStop', dialog.StopMovingOrSizing)
+	dialog:SetScript('OnKeyDown', dialog.OnKeyDown)
 
 	local dialogTitle = dialog:CreateFontString(nil, nil, 'GameFontHighlightLarge')
 	dialogTitle:SetPoint('TOP', 0, -15)
