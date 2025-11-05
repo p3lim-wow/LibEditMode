@@ -94,6 +94,7 @@ function internal:CreateExtension()
 	extension:SetFrameStrata('DIALOG')
 	extension:SetClampedToScreen(true)
 	extension:SetFrameLevel(300)
+	extension:EnableMouse(true)
 	extension:Hide()
 	extension.widthPadding = 40
 	extension.heightPadding = 40
