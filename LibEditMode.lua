@@ -203,7 +203,7 @@ local function onEditModeChanged(_, layoutInfo)
 		lib.activeLayoutName = layoutName
 
 		for _, callback in next, lib.anonCallbacksLayout do
-			securecallfunction(callback, layoutName)
+			securecallfunction(callback, layoutName, layoutInfo.activeLayout)
 		end
 
 		-- TODO: we should update the position of the button here, let the user not deal with that
@@ -394,7 +394,8 @@ Possible events:
 * `exit`: triggered when the Edit Mode is exited
 * `layout`: triggered when the Edit Mode layout is changed (which also occurs at login)
     * signature:
-        * `layoutName`: name of the new layout
+        * `layoutName`: name of the layout
+        * `layoutIndex`: index of the layout
 --]]
 function lib:RegisterCallback(event, callback)
 	assert(event and type(event) == 'string', 'event must be a string')
