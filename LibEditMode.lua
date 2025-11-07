@@ -36,9 +36,14 @@ lib.frameButtons = lib.frameButtons or {}
 lib.anonCallbacksEnter = lib.anonCallbacksEnter or {}
 lib.anonCallbacksExit = lib.anonCallbacksExit or {}
 lib.anonCallbacksLayout = lib.anonCallbacksLayout or {}
+lib.anonCallbacksCreate = lib.anonCallbacksCreate or {}
+lib.anonCallbacksRename = lib.anonCallbacksRename or {}
+lib.anonCallbacksDelete = lib.anonCallbacksDelete or {}
 
 lib.systemSettings = lib.systemSettings or {}
 lib.systemButtons = lib.systemButtons or {}
+
+lib.layoutCache = lib.layoutCache or {}
 
 local function resetDialogs()
 	if internal.dialog then
@@ -210,11 +215,41 @@ local function onEditModeChanged(_, layoutInfo)
 	end
 end
 
+local function onEditModeLayoutChanged()
+	local layouts = C_EditMode.GetLayouts().layouts
+
+	for index = #layouts, 1, -1 do
+		if lib.layoutCache[index] then
+			local layout = layouts[index]
+			if lib.layoutCache[index].layoutName ~= layout.layoutName then
+				for _, callback in next, lib.anonCallbacksRename do
+					securecallfunction(callback, lib.layoutCache[index].layoutName, layout.layoutName, index)
+				end
+			end
+
+			table.remove(lib.layoutCache, index)
+		else
+			for _, callback in next, lib.anonCallbacksCreate do
+				securecallfunction(callback, layouts[index].layoutName, index)
+			end
+		end
+	end
+
+	for _, layout in next, lib.layoutCache do
+		for _, callback in next, lib.anonCallbacksDelete do
+			securecallfunction(callback, layout.layoutName)
+		end
+	end
+
+	lib.layoutCache = layouts
+end
+
 local isManagerHooked = false
 
 local function hookManager()
 	-- listen for layout changes
 	EventRegistry:RegisterFrameEventAndCallback('EDIT_MODE_LAYOUTS_UPDATED', onEditModeChanged)
+	EventRegistry:RegisterCallback('EditMode.SavedLayouts', onEditModeLayoutChanged)
 
 	-- hook EditMode shown state, since QuickKeybindMode will hide/show EditMode
 	EditModeManagerFrame:HookScript('OnShow', onEditModeEnter)
@@ -235,7 +270,11 @@ local function hookManager()
 	end)
 
 	-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
-	onEditModeChanged(nil, C_EditMode.GetLayouts())
+	local layoutInfo = C_EditMode.GetLayouts()
+	onEditModeChanged(nil, layoutInfo)
+
+	-- warm up cache
+	lib.layoutCache = layoutInfo.layouts
 
 	isManagerHooked = true
 end
@@ -396,6 +435,18 @@ Possible events:
     * signature:
         * `layoutName`: name of the layout
         * `layoutIndex`: index of the layout
+* `create`: triggered when a Edit Mode layout has been created
+    * signature:
+        * `layoutName`: name of the new layout
+        * `layoutIndex`: index of the layout
+* `rename`: triggered when a Edit Mode layout has been renamed
+    * signature:
+        * `oldLayoutName`: name of the layout that got renamed
+        * `newLayoutName`: new name of the layout
+        * `layoutIndex`: index of the layout
+* `delete`: triggered when a Edit Mode layout has been deleted
+    * signature:
+        *`layoutName`: name of the layout that got deleted
 --]]
 function lib:RegisterCallback(event, callback)
 	assert(event and type(event) == 'string', 'event must be a string')
@@ -407,6 +458,12 @@ function lib:RegisterCallback(event, callback)
 		table.insert(lib.anonCallbacksExit, callback)
 	elseif event == 'layout' then
 		table.insert(lib.anonCallbacksLayout, callback)
+	elseif event == 'create' then
+		table.insert(lib.anonCallbacksCreate, callback)
+	elseif event == 'rename' then
+		table.insert(lib.anonCallbacksRename, callback)
+	elseif event == 'delete' then
+		table.insert(lib.anonCallbacksDelete, callback)
 	else
 		error('invalid callback event "' .. event .. '"')
 	end
