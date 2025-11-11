@@ -325,9 +325,9 @@ function lib:AddFrame(frame, callback, default, name)
 	end
 
 	-- ugly hack
-	for _, callback in next, lib.anonCallbacksLayout do
+	for _, cb in next, lib.anonCallbacksLayout do
 		local activeLayout = lib:GetActiveLayout()
-		securecallfunction(callback, layoutNames[activeLayout], layoutInfo.activeLayout)
+		securecallfunction(cb, layoutNames[activeLayout], activeLayout)
 	end
 end
 
