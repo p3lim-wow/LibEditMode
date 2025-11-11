@@ -203,12 +203,12 @@ local function onEditModeExit()
 end
 
 local function onEditModeChanged(_, layoutInfo)
-	local layoutName = layoutNames[layoutInfo.activeLayout]
-	if layoutName ~= lib.activeLayoutName then
-		lib.activeLayoutName = layoutName
+	local activeLayout = layoutInfo.activeLayout
+	if activeLayout ~= lib.activeLayout then
+		lib.activeLayout = activeLayout
 
 		for _, callback in next, lib.anonCallbacksLayout do
-			securecallfunction(callback, layoutName, layoutInfo.activeLayout)
+			securecallfunction(callback, layoutNames[activeLayout], activeLayout)
 		end
 
 		-- TODO: we should update the position of the button here, let the user not deal with that
@@ -322,6 +322,12 @@ function lib:AddFrame(frame, callback, default, name)
 		if not isManagerHooked then
 			hookManager()
 		end
+	end
+
+	-- ugly hack
+	for _, callback in next, lib.anonCallbacksLayout do
+		local activeLayout = lib:GetActiveLayout()
+		securecallfunction(callback, layoutNames[activeLayout], layoutInfo.activeLayout)
 	end
 end
 
@@ -469,6 +475,16 @@ function lib:RegisterCallback(event, callback)
 	end
 end
 
+--[[ LibEditMode:GetActiveLayout() ![](https://img.shields.io/badge/function-blue)
+Returns the active Edit Mode layout.
+
+This will not return valid data until after the layout has been loaded from the server.  
+Data will be available for the ["layout" callback](#libeditmoderegistercallbackevent-callback).
+--]]
+function lib:GetActiveLayout()
+	return lib.activeLayout
+end
+
 --[[ LibEditMode:GetActiveLayoutName() ![](https://img.shields.io/badge/function-blue)
 Returns the active Edit Mode layout name.
 
@@ -476,7 +492,7 @@ This will not return valid data until after the layout has been loaded from the 
 Data will be available for the ["layout" callback](#libeditmoderegistercallbackevent-callback).
 --]]
 function lib:GetActiveLayoutName()
-	return lib.activeLayoutName
+	return layoutNames[lib.activeLayout]
 end
 
 --[[ LibEditMode:IsInEditMode() ![](https://img.shields.io/badge/function-blue)
@@ -501,7 +517,7 @@ end
 
 function internal:TriggerCallback(frame, ...)
 	if lib.frameCallbacks[frame] then
-		securecallfunction(lib.frameCallbacks[frame], frame, lib.activeLayoutName, ...)
+		securecallfunction(lib.frameCallbacks[frame], frame, layoutNames[lib.activeLayout], ...)
 	end
 end
 

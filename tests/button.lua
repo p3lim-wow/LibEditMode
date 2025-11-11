@@ -22,8 +22,6 @@ local defaultPosition = {
 }
 
 local LEM = LibStub('LibEditMode')
-LEM:AddFrame(button, onPositionChanged, defaultPosition)
-
 LEM:RegisterCallback('layout', function(layoutName)
 	if not ButtonDB then
 		ButtonDB = {}
@@ -35,6 +33,8 @@ LEM:RegisterCallback('layout', function(layoutName)
 	button:ClearAllPoints()
 	button:SetPoint(ButtonDB[layoutName].point, ButtonDB[layoutName].x, ButtonDB[layoutName].y)
 end)
+
+LEM:AddFrame(button, onPositionChanged, defaultPosition)
 
 LEM:AddFrameSettings(button, {
 	{
