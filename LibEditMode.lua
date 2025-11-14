@@ -323,12 +323,6 @@ function lib:AddFrame(frame, callback, default, name)
 			hookManager()
 		end
 	end
-
-	-- ugly hack
-	for _, cb in next, lib.anonCallbacksLayout do
-		local activeLayout = lib:GetActiveLayout()
-		securecallfunction(cb, layoutNames[activeLayout], activeLayout)
-	end
 end
 
 --[[ LibEditMode:AddFrameSettings(_frame, settings_) ![](https://img.shields.io/badge/function-blue)
@@ -464,6 +458,11 @@ function lib:RegisterCallback(event, callback)
 		table.insert(lib.anonCallbacksExit, callback)
 	elseif event == 'layout' then
 		table.insert(lib.anonCallbacksLayout, callback)
+
+		-- if there's none, then onEditModeChanged will take care of it
+		if lib.activeLayout then
+			securecallfunction(callback, layoutNames[lib.activeLayout], lib.activeLayout)
+		end
 	elseif event == 'create' then
 		table.insert(lib.anonCallbacksCreate, callback)
 	elseif event == 'rename' then
