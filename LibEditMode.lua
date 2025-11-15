@@ -500,7 +500,7 @@ This will not return valid data until after the layout has been loaded from the 
 Data will be available for the ["layout" callback](#libeditmoderegistercallbackevent-callback).
 --]]
 function lib:GetActiveLayoutName()
-	return layoutNames[lib.activeLayout]
+	return lib.activeLayout and layoutNames[lib.activeLayout]
 end
 
 --[[ LibEditMode:IsInEditMode() ![](https://img.shields.io/badge/function-blue)
