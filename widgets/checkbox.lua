@@ -9,7 +9,7 @@ function checkboxMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.name)
 
-	local value = data.get(lib.activeLayoutName)
+	local value = data.get(lib:GetActiveLayoutName())
 	if value == nil then
 		value = data.default
 	end
@@ -21,7 +21,7 @@ end
 function checkboxMixin:OnCheckButtonClick()
 	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 	self.checked = not self.checked
-	self.setting.set(lib.activeLayoutName, not not self.checked) -- force boolean
+	self.setting.set(lib:GetActiveLayoutName(), not not self.checked) -- force boolean
 end
 
 lib.internal:CreatePool(lib.SettingType.Checkbox, function()

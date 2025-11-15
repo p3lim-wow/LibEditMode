@@ -5,11 +5,11 @@ if minor > MINOR then
 end
 
 local function get(data)
-	return data.get(lib.activeLayoutName) == data.value
+	return data.get(lib:GetActiveLayoutName()) == data.value
 end
 
 local function set(data)
-	data.set(lib.activeLayoutName, data.value)
+	data.set(lib:GetActiveLayoutName(), data.value)
 end
 
 local dropdownMixin = {}
