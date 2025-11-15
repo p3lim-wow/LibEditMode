@@ -8,25 +8,6 @@ end
 lib.internal = {} -- internal methods, do not use directly
 local internal = lib.internal
 
-local layoutNames = setmetatable({'Modern', 'Classic'}, {
-	__index = function(t, key)
-		if key > 2 then
-			-- the first 2 indices are reserved for 'Modern' and 'Classic' layouts, and anything
-			-- else are custom ones, although GetLayouts() doesn't return data for the 'Modern'
-			-- and 'Classic' layouts, so we'll have to substract and check
-			local layouts = C_EditMode.GetLayouts().layouts
-			if (key - 2) > #layouts then
-				error('index is out of bounds')
-			else
-				return layouts[key - 2].layoutName
-			end
-		else
-			-- also work for 'Modern' and 'Classic'
-			rawget(t, key)
-		end
-	end
-})
-
 lib.frameSelections = lib.frameSelections or {}
 lib.frameCallbacks = lib.frameCallbacks or {}
 lib.frameDefaults = lib.frameDefaults or {}
@@ -44,6 +25,25 @@ lib.systemSettings = lib.systemSettings or {}
 lib.systemButtons = lib.systemButtons or {}
 
 lib.layoutCache = lib.layoutCache or {}
+
+local layoutNames = setmetatable({'Modern', 'Classic'}, {
+	__index = function(t, key)
+		if key > 2 then
+			-- the first 2 indices are reserved for 'Modern' and 'Classic' layouts, and anything
+			-- else are custom ones, although GetLayouts() doesn't return data for the 'Modern'
+			-- and 'Classic' layouts, so we'll have to substract and check
+			local layouts = lib.layoutCache.layouts
+			if (key - 2) > #layouts then
+				error('index is out of bounds')
+			else
+				return layouts[key - 2].layoutName
+			end
+		else
+			-- also work for 'Modern' and 'Classic'
+			rawget(t, key)
+		end
+	end
+})
 
 local function resetDialogs()
 	if internal.dialog then
