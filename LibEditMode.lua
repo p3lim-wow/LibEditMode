@@ -215,6 +215,14 @@ local function onEditModeChanged(_, layoutInfo)
 	end
 end
 
+local function onSpecChanged(_, unit)
+	if unit ~= 'player' then
+		return
+	end
+
+	onEditModeChanged(nil, C_EditMode.GetLayouts())
+end
+
 local function onEditModeLayoutChanged()
 	local layouts = C_EditMode.GetLayouts().layouts
 
@@ -249,6 +257,7 @@ local isManagerHooked = false
 local function hookManager()
 	-- listen for layout changes
 	EventRegistry:RegisterFrameEventAndCallback('EDIT_MODE_LAYOUTS_UPDATED', onEditModeChanged)
+	EventRegistry:RegisterFrameEventAndCallback('PLAYER_SPECIALIZATION_CHANGED', onSpecChanged)
 	EventRegistry:RegisterCallback('EditMode.SavedLayouts', onEditModeLayoutChanged)
 
 	-- hook EditMode shown state, since QuickKeybindMode will hide/show EditMode
