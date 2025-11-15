@@ -32,7 +32,7 @@ local layoutNames = setmetatable({'Modern', 'Classic'}, {
 			-- the first 2 indices are reserved for 'Modern' and 'Classic' layouts, and anything
 			-- else are custom ones, although GetLayouts() doesn't return data for the 'Modern'
 			-- and 'Classic' layouts, so we'll have to substract and check
-			local layouts = lib.layoutCache.layouts
+			local layouts = lib.layoutCache
 			if (key - 2) > #layouts then
 				error('index is out of bounds')
 			else
