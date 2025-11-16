@@ -21,12 +21,6 @@ function dialogMixin:Update(selection)
 	self:UpdateSettings()
 	self:UpdateButtons()
 
-	-- reset position
-	if not self:IsShown() then
-		self:ClearAllPoints()
-		self:SetPoint('BOTTOMRIGHT', UIParent, -250, 250)
-	end
-
 	-- show and update layout
 	self:Show()
 	self:Layout()
@@ -51,6 +45,12 @@ function dialogMixin:UpdateSettings()
 	self.Settings.ResetButton.layoutIndex = num + 1
 	self.Settings.Divider.layoutIndex = num + 2
 	self.Settings.ResetButton:SetEnabled(num > 0)
+end
+
+function dialogMixin:Reset()
+	self.selection = nil
+	self:ClearAllPoints()
+	self:SetPoint('BOTTOMRIGHT', UIParent, -250, 250)
 end
 
 local function closeEnough(a, b)
@@ -157,6 +157,8 @@ function internal:CreateDialog()
 	dialog:Hide()
 	dialog.widthPadding = 40
 	dialog.heightPadding = 40
+
+	dialog:Reset()
 
 	-- make draggable
 	dialog:EnableMouse(true)

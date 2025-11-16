@@ -174,6 +174,11 @@ local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSy
 	if not self.isSelected then
 		self.parent:SetMovable(true)
 		self:ShowSelected(true)
+
+		if internal.dialog.selection ~= self then
+			internal.dialog:Reset()
+		end
+
 		internal.dialog:Update(self)
 	end
 end
@@ -272,6 +277,8 @@ local function hookManager()
 	hooksecurefunc(EditModeManagerFrame, 'SelectSystem', function(_, systemFrame)
 		resetDialogs()
 		resetSelection()
+
+		internal.dialog:Reset()
 
 		local systemID = systemFrame.system
 		if lib.systemSettings[systemID] or lib.systemButtons[systemID] then
