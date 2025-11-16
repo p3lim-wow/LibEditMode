@@ -205,6 +205,9 @@ local function onEditModeChanged(_, layoutInfo)
 	if activeLayout ~= lib.activeLayout then
 		lib.activeLayout = activeLayout
 
+		-- update cache
+		lib.layoutCache = C_EditMode.GetLayouts().layouts
+
 		for _, callback in next, lib.anonCallbacksLayout do
 			securecallfunction(callback, layoutNames[activeLayout], activeLayout)
 		end
@@ -279,9 +282,6 @@ local function hookManager()
 	-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
 	local layoutInfo = C_EditMode.GetLayouts()
 	onEditModeChanged(nil, layoutInfo)
-
-	-- warm up cache
-	lib.layoutCache = layoutInfo.layouts
 
 	isManagerHooked = true
 end
