@@ -280,8 +280,9 @@ local function hookManager()
 	end)
 
 	-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
-	local layoutInfo = C_EditMode.GetLayouts()
-	onEditModeChanged(nil, layoutInfo)
+	if lib.layoutCache then
+		onEditModeChanged(nil, C_EditMode.GetLayouts()) -- introduces a little latency
+	end
 
 	isManagerHooked = true
 end
