@@ -28,6 +28,8 @@ read_globals = {
 	'EventRegistry',
 	'MinimalSliderWithSteppersMixin',
 	'UIParent',
+	'SettingsTooltip',
+	'DefaultTooltipMixin',
 
 	-- FrameXML functions
 	'CopyTable',
