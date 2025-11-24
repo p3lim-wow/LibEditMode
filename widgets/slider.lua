@@ -4,6 +4,16 @@ if minor > MINOR then
 	return
 end
 
+local function showTooltip(self)
+	if self.setting and self.setting.desc then
+		SettingsTooltip:SetOwner(self, 'ANCHOR_NONE')
+		SettingsTooltip:SetPoint('BOTTOMRIGHT', self, 'TOPLEFT')
+		SettingsTooltip:SetText(self.setting.name, 1, 1, 1)
+		SettingsTooltip:AddLine(self.setting.desc)
+		SettingsTooltip:Show()
+	end
+end
+
 local sliderMixin = {}
 function sliderMixin:Setup(data)
 	self.setting = data
@@ -27,6 +37,8 @@ end
 
 lib.internal:CreatePool(lib.SettingType.Slider, function()
 	local frame = CreateFrame('Frame', nil, UIParent, 'EditModeSettingSliderTemplate')
+	frame:SetScript('OnLeave', DefaultTooltipMixin.OnLeave)
+	frame:SetScript('OnEnter', showTooltip)
 	Mixin(frame, sliderMixin)
 
 	frame:SetHeight(32)

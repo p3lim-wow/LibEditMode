@@ -4,6 +4,16 @@ if minor > MINOR then
 	return
 end
 
+local function showTooltip(self)
+	if self.setting and self.setting.desc then
+		SettingsTooltip:SetOwner(self, 'ANCHOR_NONE')
+		SettingsTooltip:SetPoint('BOTTOMRIGHT', self, 'TOPLEFT')
+		SettingsTooltip:SetText(self.setting.name, 1, 1, 1)
+		SettingsTooltip:AddLine(self.setting.desc)
+		SettingsTooltip:Show()
+	end
+end
+
 local checkboxMixin = {}
 function checkboxMixin:Setup(data)
 	self.setting = data
@@ -26,6 +36,8 @@ end
 
 lib.internal:CreatePool(lib.SettingType.Checkbox, function()
 	local frame = CreateFrame('Frame', nil, UIParent, 'EditModeSettingCheckboxTemplate')
+	frame:SetScript('OnLeave', DefaultTooltipMixin.OnLeave)
+	frame:SetScript('OnEnter', showTooltip)
 	return Mixin(frame, checkboxMixin)
 end, function(_, frame)
 	frame:Hide()

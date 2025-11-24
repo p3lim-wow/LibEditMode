@@ -4,6 +4,16 @@ if minor > MINOR then
 	return
 end
 
+local function showTooltip(self)
+	if self.setting and self.setting.desc then
+		SettingsTooltip:SetOwner(self, 'ANCHOR_NONE')
+		SettingsTooltip:SetPoint('BOTTOMRIGHT', self, 'TOPLEFT')
+		SettingsTooltip:SetText(self.setting.name, 1, 1, 1)
+		SettingsTooltip:AddLine(self.setting.desc)
+		SettingsTooltip:Show()
+	end
+end
+
 local function get(data)
 	return data.get(lib:GetActiveLayoutName()) == data.value
 end
@@ -49,6 +59,8 @@ end
 
 lib.internal:CreatePool(lib.SettingType.Dropdown, function()
 	local frame = CreateFrame('Frame', nil, UIParent, 'ResizeLayoutFrame')
+	frame:SetScript('OnLeave', DefaultTooltipMixin.OnLeave)
+	frame:SetScript('OnEnter', showTooltip)
 	frame.fixedHeight = 32
 	Mixin(frame, dropdownMixin)
 

@@ -581,12 +581,14 @@ Table containing the following entries:
 |:--------|:------------------------------|:----------------------------|:---------|
 | kind    | setting type                  | [SettingType](#settingtype) | yes      |
 | name    | label for the setting         | string                      | yes      |
+| desc    | description for the setting   | string                      | no       |
 | default | default value for the setting | any                         | yes      |
 | get     | getter for the current value  | function                    | yes      |
 | set     | setter for the new value      | function                    | yes      |
 
 - The getter passes `layoutName` as the sole argument and expects a value in return.  
 - The setter passes (`layoutName`, `newValue`) and expects no returns.
+- The description is shown in a tooltip.
 
 Depending on the setting type there are additional required and optional entries:
 
