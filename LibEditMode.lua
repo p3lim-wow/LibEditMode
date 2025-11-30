@@ -354,6 +354,44 @@ function lib:AddFrameSettings(frame, settings)
 	lib.frameSettings[frame] = settings
 end
 
+--[[ LibEditMode:EnableFrameSetting(_frame, settingName_) ![](https://img.shields.io/badge/function-blue)
+Enables a setting on a frame.
+
+* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default-)
+* `settingName`: a setting already registered with [AddFrameSettings](#libeditmodeaddframesettingsframe-settings-)
+--]]
+function lib:EnableFrameSetting(frame, settingName)
+	local settings = internal:GetFrameSettings(frame)
+	if settings then
+		for _, setting in next, settings do
+			if setting.name == settingName then
+				setting.disabled = false
+				internal.dialog:Update(internal.dialog.selection)
+				break
+			end
+		end
+	end
+end
+
+--[[ LibEditMode:DisableFrameSetting(_frame, settingName_) ![](https://img.shields.io/badge/function-blue)
+Disables a setting on a frame.
+
+* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default-)
+* `settingName`: a setting already registered with [AddFrameSettings](#libeditmodeaddframesettingsframe-settings-)
+--]]
+function lib:DisableFrameSetting(frame, settingName)
+	local settings = internal:GetFrameSettings(frame)
+	if settings then
+		for _, setting in next, settings do
+			if setting.name == settingName then
+				setting.disabled = true
+				internal.dialog:Update(internal.dialog.selection)
+				break
+			end
+		end
+	end
+end
+
 --[[ LibEditMode:AddFrameSettingsButton(_frame, data_) ![](https://img.shields.io/badge/function-blue)
 
 > :warning: Deprecated. Please use [`LibEditMode:AddFrameSettingsButtons(frame, buttons)`](#libeditmodeaddframesettingsbuttonsframe-buttons-) instead.
@@ -409,6 +447,44 @@ function lib:AddSystemSettings(systemID, settings)
 
 	if not isManagerHooked then
 		hookManager()
+	end
+end
+
+--[[ LibEditMode:EnableSystemSetting(_systemID, settingName_) ![](https://img.shields.io/badge/function-blue)
+Enables a setting on a frame.
+
+* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
+* `settingName`: a setting already registered with [AddSystemSettings](#libeditmodeaddsystemsettingssystemid-settings-)
+--]]
+function lib:EnableSystemSetting(systemID, settingName)
+	local settings = internal:GetSystemSettings(systemID)
+	if settings then
+		for _, setting in next, settings do
+			if setting.name == settingName then
+				setting.disabled = false
+				internal.extension:Update(internal.extension.systemID)
+				break
+			end
+		end
+	end
+end
+
+--[[ LibEditMode:DisableSystemSetting(_systemID, settingName_) ![](https://img.shields.io/badge/function-blue)
+Disables a setting on a frame.
+
+* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
+* `settingName`: a setting already registered with [AddSystemSettings](#libeditmodeaddsystemsettingssystemid-settings-)
+--]]
+function lib:DisableSystemSetting(systemID, settingName)
+	local settings = internal:GetSystemSettings(systemID)
+	if settings then
+		for _, setting in next, settings do
+			if setting.name == settingName then
+				setting.disabled = true
+				internal.extension:Update(internal.extension.systemID)
+				break
+			end
+		end
 	end
 end
 
@@ -577,16 +653,17 @@ end
 
 Table containing the following entries:
 
-| key     | value                         | type                        | required |
-|:--------|:------------------------------|:----------------------------|:---------|
-| kind    | setting type                  | [SettingType](#settingtype) | yes      |
-| name    | label for the setting         | string                      | yes      |
-| desc    | description for the setting   | string                      | no       |
-| default | default value for the setting | any                         | yes      |
-| get     | getter for the current value  | function                    | yes      |
-| set     | setter for the new value      | function                    | yes      |
+| key      | value                                  | type                        | required |
+|:---------|:---------------------------------------|:----------------------------|:---------|
+| kind     | setting type                           | [SettingType](#settingtype) | yes      |
+| name     | label for the setting                  | string                      | yes      |
+| desc     | description for the setting            | string                      | no       |
+| default  | default value for the setting          | any                         | yes      |
+| get      | getter for the current value           | function                    | yes      |
+| set      | setter for the new value               | function                    | yes      |
+| disabled | whether the setting should be disabled | boolean                     | no       |
 
-- The getter passes `layoutName` as the sole argument and expects a value in return.  
+- The getter passes `layoutName` as the sole argument and expects a value in return.
 - The setter passes (`layoutName`, `newValue`) and expects no returns.
 - The description is shown in a tooltip.
 

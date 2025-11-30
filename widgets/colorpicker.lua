@@ -32,6 +32,7 @@ local colorPickerMixin = {}
 function colorPickerMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.name)
+	self:SetEnabled(not data.disabled)
 
 	local value = data.get(lib:GetActiveLayoutName())
 	if value == nil then
@@ -64,6 +65,11 @@ function colorPickerMixin:OnColorChanged(color)
 	self.colorInfo.g = g
 	self.colorInfo.b = b
 	self.colorInfo.a = a
+end
+
+function colorPickerMixin:SetEnabled(enabled)
+	self.Swatch:SetEnabled(enabled)
+	self.Label:SetTextColor((enabled and WHITE_FONT_COLOR or DISABLED_FONT_COLOR):GetRGB())
 end
 
 local function onSwatchClick(self)

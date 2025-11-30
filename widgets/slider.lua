@@ -18,6 +18,7 @@ local sliderMixin = {}
 function sliderMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.name)
+	self:SetEnabled(not data.disabled)
 
 	self.initInProgress = true
 	self.formatters = {}
@@ -33,6 +34,12 @@ function sliderMixin:OnSliderValueChanged(value)
 	if not self.initInProgress then
 		self.setting.set(lib:GetActiveLayoutName(), value)
 	end
+end
+
+function sliderMixin:SetEnabled(enabled)
+	self.Slider:SetEnabled(enabled)
+	self.Label:SetTextColor((enabled and WHITE_FONT_COLOR or DISABLED_FONT_COLOR):GetRGB())
+	self.EditBox:SetShown(enabled)
 end
 
 local function onEditFocus(self)
@@ -104,6 +111,7 @@ lib.internal:CreatePool(lib.SettingType.Slider, function()
 	editBox:SetScript('OnEnterPressed', onEditSubmit)
 	editBox:SetScript('OnEscapePressed', onEditReset)
 	editBox:SetScript('OnEditFocusLost', onEditReset)
+	frame.EditBox = editBox
 
 	frame:OnLoad()
 	return frame

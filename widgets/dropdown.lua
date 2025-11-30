@@ -37,6 +37,7 @@ local dropdownMixin = {}
 function dropdownMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.name)
+	self:SetEnabled(not data.disabled)
 
 	if data.generator then
 		-- let the user have full control
@@ -66,6 +67,11 @@ function dropdownMixin:Setup(data)
 			end
 		end)
 	end
+end
+
+function dropdownMixin:SetEnabled(enabled)
+	self.Dropdown:SetEnabled(enabled)
+	self.Label:SetTextColor((enabled and WHITE_FONT_COLOR or DISABLED_FONT_COLOR):GetRGB())
 end
 
 lib.internal:CreatePool(lib.SettingType.Dropdown, function()
