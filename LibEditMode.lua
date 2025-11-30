@@ -343,7 +343,7 @@ end
 --[[ LibEditMode:AddFrameSettings(_frame, settings_) ![](https://img.shields.io/badge/function-blue)
 Register extra settings that will be displayed in a dialog attached to the frame in the Edit Mode.
 
-* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
+* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default-)
 * `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettings(frame, settings)
@@ -398,7 +398,7 @@ end
 
 Register extra button that will be displayed in a dialog attached to the frame in the Edit Mode.
 
-* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
+* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default-)
 * `data`: [ButtonObject](Types#buttonobject) _(table)_
 --]]
 function lib:AddFrameSettingsButton(frame, data)
@@ -412,7 +412,7 @@ end
 --[[ LibEditMode:AddFrameSettingsButtons(_frame, buttons_) ![](https://img.shields.io/badge/function-blue)
 Register extra buttons that will be displayed in a dialog attached to the frame in the Edit Mode.
 
-* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default)
+* `frame`: frame widget already registered with [AddFrame](#libeditmodeaddframeframe-callback-default-)
 * `buttons`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
 --]]
 function lib:AddFrameSettingsButtons(frame, buttons)
@@ -599,7 +599,7 @@ Returns the default position table registered with the frame.
 
 Returns:
 
-* `defaultPosition`: table registered with the frame in [AddFrame](#libeditmodeaddframeframe-callback-default) _(table)_
+* `defaultPosition`: table registered with the frame in [AddFrame](#libeditmodeaddframeframe-callback-default-) _(table)_
 --]]
 function lib:GetFrameDefaultPosition(frame)
 	return lib.frameDefaults[frame]
