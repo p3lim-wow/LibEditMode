@@ -15,7 +15,18 @@ local function showTooltip(self)
 end
 
 local function get(data)
-	return data.get(lib:GetActiveLayoutName()) == data.value
+	local value = data.get(lib:GetActiveLayoutName())
+	if value then
+		if type(value) == 'table' then
+			for _, v in next, value do
+				if v == data.value then
+					return true
+				end
+			end
+		else
+			return value == data.value
+		end
+	end
 end
 
 local function set(data)
