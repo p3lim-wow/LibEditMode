@@ -35,6 +35,53 @@ function sliderMixin:OnSliderValueChanged(value)
 	end
 end
 
+local function onEditFocus(self)
+	local parent = self:GetParent()
+
+	-- hide slider
+	parent.Slider:Hide()
+
+	-- resize editbox to take up the available space
+	self:ClearAllPoints()
+	self:SetPoint('RIGHT', parent.Slider.RightText, 5, 0)
+	self:SetPoint('TOPLEFT', parent.Slider)
+	self:SetPoint('BOTTOMLEFT', parent.Slider)
+
+	-- set editbox text to current slider value
+	-- TODO: maybe flatten the value here
+	self:SetText(parent.Slider.Slider:GetValue())
+	self:SetCursorPosition(0)
+end
+
+local function onEditSubmit(self)
+	local parent = self:GetParent()
+
+	-- get bounds and value
+	local min, max = parent.Slider.Slider:GetMinMaxValues()
+	local value = self:GetText()
+
+	-- trigger change if value is a valid number
+	if tonumber(value) then
+		-- use bounds when updating value
+		parent.Slider:SetValue(math.min(math.max(value, min), max))
+	end
+
+	self:ClearFocus()
+end
+
+local function onEditReset(self)
+	local parent = self:GetParent()
+	parent.Slider:Show()
+
+	self:SetText('')
+	self:ClearFocus()
+
+	self:ClearAllPoints()
+	self:SetPoint('RIGHT', parent.Slider.RightText, 5, 0)
+	self:SetPoint('TOPLEFT', parent.Slider.RightText)
+	self:SetPoint('BOTTOMLEFT', parent.Slider.RightText)
+end
+
 lib.internal:CreatePool(lib.SettingType.Slider, function()
 	local frame = CreateFrame('Frame', nil, UIParent, 'EditModeSettingSliderTemplate')
 	frame:SetScript('OnLeave', DefaultTooltipMixin.OnLeave)
@@ -46,6 +93,17 @@ lib.internal:CreatePool(lib.SettingType.Slider, function()
 	frame.Slider.MinText:Hide()
 	frame.Slider.MaxText:Hide()
 	frame.Label:SetPoint('LEFT')
+
+	local editBox = CreateFrame('EditBox', nil, frame, 'InputBoxTemplate')
+	editBox:SetPoint('TOPLEFT', frame.Slider.RightText)
+	editBox:SetPoint('BOTTOMLEFT', frame.Slider.RightText)
+	editBox:SetPoint('RIGHT', frame.Slider.RightText, 5, 0)
+	editBox:SetAutoFocus(false)
+	editBox:SetJustifyH('CENTER')
+	editBox:SetScript('OnEditFocusGained', onEditFocus)
+	editBox:SetScript('OnEnterPressed', onEditSubmit)
+	editBox:SetScript('OnEscapePressed', onEditReset)
+	editBox:SetScript('OnEditFocusLost', onEditReset)
 
 	frame:OnLoad()
 	return frame
