@@ -626,6 +626,15 @@ Table containing the following entries:
 
 - The formatter passes `value` as the sole argument and expects a number value in return.
 
+### ColorPicker ![](https://img.shields.io/badge/object-teal)
+
+| key        | value                            | type    | required | default |
+|:-----------|:---------------------------------|:--------|:---------|:--------|
+| hasOpacity | whether or not to enable opacity | boolean | no       | false   |
+
+The `default` field and the getter expects a [ColorMixin](https://warcraft.wiki.gg/wiki/ColorMixin) object, and the setter will pass one as its value.  
+Even if `hasOpacity` is set to `false` (which is the default value) the ColorMixin object will contain an alpha value, this is the default behavior of the ColorMixin.
+
 ## ButtonObject ![](https://img.shields.io/badge/object-teal)
 
 Table containing the following entries:
@@ -643,5 +652,7 @@ One of:
 - `Checkbox`
 - `Slider`
 - `Divider`
+- `ColorPicker`
 --]]
 lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)
+lib.SettingType.ColorPicker = 10 -- leave some room for blizzard expansion
