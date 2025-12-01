@@ -674,6 +674,7 @@ Depending on the setting type there are additional required and optional entries
 | key       | value                                                                                                                 | type     | required |
 |:----------|:----------------------------------------------------------------------------------------------------------------------|:---------|:---------|
 | values    | indexed table containing [DropdownOption](#dropdownoption)s                                                           | table    | no       |
+| multiple  | whether the dropdown should allow selecing multiple options                                                           | boolean  | no       |
 | generator | [Dropdown `SetupMenu` "generator" (callback)](https://warcraft.wiki.gg/wiki/Patch_11.0.0/API_changes#New_menu_system) | function | no       |
 | height    | max height of the menu                                                                                                | integer  | no       |
 
@@ -690,7 +691,6 @@ Table containing the following entries:
 |:--------|:-------------------------------------------------------------------|---------|:---------|
 | text    | text rendered in the dropdown                                      | string  | yes      |
 | value   | value the text represents, defaults to the text if not provided    | any     | no       |
-| isRadio | turns the dropdown entry into a Radio button, otherwise a Checkbox | boolean | no       |
 
 ### Slider ![](https://img.shields.io/badge/object-teal)
 

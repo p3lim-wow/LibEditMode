@@ -17,7 +17,9 @@ end
 local function get(data)
 	local value = data.get(lib:GetActiveLayoutName())
 	if value then
-		if type(value) == 'table' then
+		if data.multiple then
+			assert(type(value) == 'table', "multiple choice dropdowns expects a table from 'get'")
+
 			for _, v in next, value do
 				if v == data.value then
 					return true
@@ -51,17 +53,19 @@ function dropdownMixin:Setup(data)
 			end
 
 			for _, value in next, data.values do
-				if value.isRadio then
-					rootDescription:CreateRadio(value.text, get, set, {
-						get = data.get,
-						set = data.set,
-						value = value.value or value.text,
-					})
-				else
+				if data.multiple then
 					rootDescription:CreateCheckbox(value.text, get, set, {
 						get = data.get,
 						set = data.set,
 						value = value.value or value.text,
+						multiple = data.multiple,
+					})
+				else
+					rootDescription:CreateRadio(value.text, get, set, {
+						get = data.get,
+						set = data.set,
+						value = value.value or value.text,
+						multiple = data.multiple,
 					})
 				end
 			end
