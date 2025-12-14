@@ -213,6 +213,12 @@ local function onEditModeChanged(_, layoutInfo)
 		-- update cache
 		lib.layoutCache = C_EditMode.GetLayouts().layouts
 
+		-- update dialog
+		if internal.dialog.selection then
+			internal.dialog:Update(internal.dialog.selection)
+		end
+
+		-- trigger callbacks
 		for _, callback in next, lib.anonCallbacksLayout do
 			securecallfunction(callback, layoutNames[activeLayout], activeLayout)
 		end
