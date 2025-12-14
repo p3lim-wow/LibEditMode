@@ -214,7 +214,7 @@ local function onEditModeChanged(_, layoutInfo)
 		lib.layoutCache = C_EditMode.GetLayouts().layouts
 
 		-- update dialog
-		if internal.dialog.selection then
+		if internal.dialog and internal.dialog.selection then
 			internal.dialog:Update(internal.dialog.selection)
 		end
 
