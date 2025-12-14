@@ -64,7 +64,7 @@ function colorPickerMixin:OnColorChanged(color)
 	self.colorInfo.r = r
 	self.colorInfo.g = g
 	self.colorInfo.b = b
-	self.colorInfo.a = a
+	self.colorInfo.opacity = a
 end
 
 function colorPickerMixin:SetEnabled(enabled)
@@ -77,7 +77,7 @@ local function onSwatchClick(self)
 	local info = parent.colorInfo
 
 	-- store current/previous colors for reset capabilities
-	parent.oldValue = CreateColor(info.r, info.g, info.b, info.a)
+	parent.oldValue = CreateColor(info.r, info.g, info.b, info.opacity)
 
 	ColorPickerFrame:SetupColorPickerAndShow(info)
 end
