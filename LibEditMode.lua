@@ -431,6 +431,16 @@ function lib:AddFrameSettingsButtons(frame, buttons)
 	end
 end
 
+--[[ LibEditMode:RefreshFrameSettings(_frame_) ![](https://img.shields.io/badge/function-blue)
+Refresh the dialog attached to the frame.
+--]]
+function lib:RefreshFrameSettings(frame)
+	local selection = lib.frameSelections[frame]
+	if selection and internal.dialog and internal.dialog.selection == selection and internal.dialog:IsVisible() then
+		internal.dialog:Update()
+	end
+end
+
 --[[ LibEditMode:AddSystemSettings(_systemID, settings_) ![](https://img.shields.io/badge/function-blue)
 Register extra settings for a Blizzard system, it will be displayed in an dialog attached to the system's dialog in the Edit Mode.
 
