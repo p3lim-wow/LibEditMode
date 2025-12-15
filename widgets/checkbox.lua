@@ -32,7 +32,7 @@ end
 function checkboxMixin:OnCheckButtonClick()
 	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 	self.checked = not self.checked
-	self.setting.set(lib:GetActiveLayoutName(), not not self.checked) -- force boolean
+	self.setting.set(lib:GetActiveLayoutName(), not not self.checked, false)
 end
 
 function checkboxMixin:SetEnabled(enabled)

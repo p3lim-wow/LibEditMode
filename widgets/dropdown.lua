@@ -32,7 +32,7 @@ local function get(data)
 end
 
 local function set(data)
-	data.set(lib:GetActiveLayoutName(), data.value)
+	data.set(lib:GetActiveLayoutName(), data.value, false)
 end
 
 local dropdownMixin = {}

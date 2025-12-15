@@ -55,7 +55,7 @@ function colorPickerMixin:Setup(data)
 end
 
 function colorPickerMixin:OnColorChanged(color)
-	self.setting.set(lib:GetActiveLayoutName(), color)
+	self.setting.set(lib:GetActiveLayoutName(), color, false)
 
 	local r, g, b, a = color:GetRGBA()
 	self.Swatch:SetColorRGB(r, g, b)

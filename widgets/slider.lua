@@ -32,7 +32,7 @@ end
 
 function sliderMixin:OnSliderValueChanged(value)
 	if not self.initInProgress then
-		self.setting.set(lib:GetActiveLayoutName(), value)
+		self.setting.set(lib:GetActiveLayoutName(), value, false)
 	end
 end
 
