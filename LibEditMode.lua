@@ -680,7 +680,7 @@ Table containing the following entries:
 | disabled | whether the setting should be disabled | boolean                     | no       |
 
 - The getter passes `layoutName` as the sole argument and expects a value in return.
-- The setter passes (`layoutName`, `newValue`) and expects no returns.
+- The setter passes (`layoutName`, `newValue`, `fromReset`) and expects no returns.
 - The description is shown in a tooltip.
 
 Depending on the setting type there are additional required and optional entries:
