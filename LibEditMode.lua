@@ -284,7 +284,9 @@ local function hookManager()
 		resetDialogs()
 		resetSelection()
 
-		internal.dialog:Reset()
+		if internal.dialog then
+			internal.dialog:Reset()
+		end
 
 		local systemID = systemFrame.system
 		if lib.systemSettings[systemID] or lib.systemButtons[systemID] then
