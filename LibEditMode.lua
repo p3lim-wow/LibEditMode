@@ -446,7 +446,7 @@ function lib:RefreshFrameSettings(frame)
 	end
 end
 
---[[ LibEditMode:AddSystemSettings(_systemID, settings_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:AddSystemSettings(_systemID, settings, subSystemID_) ![](https://img.shields.io/badge/function-blue)
 Register extra settings for a Blizzard system, it will be displayed in an dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
@@ -485,7 +485,7 @@ function lib:AddSystemSettings(systemID, settings, subSystemID)
 	end
 end
 
---[[ LibEditMode:EnableSystemSetting(_systemID, settingName_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:EnableSystemSetting(_systemID, settingName, subSystemID_) ![](https://img.shields.io/badge/function-blue)
 Enables a setting on a frame.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
@@ -505,7 +505,7 @@ function lib:EnableSystemSetting(systemID, settingName, subSystemID)
 	end
 end
 
---[[ LibEditMode:DisableSystemSetting(_systemID, settingName_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:DisableSystemSetting(_systemID, settingName, subSystemID_) ![](https://img.shields.io/badge/function-blue)
 Disables a setting on a frame.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
@@ -525,7 +525,7 @@ function lib:DisableSystemSetting(systemID, settingName, subSystemID)
 	end
 end
 
---[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons, subSystemID_) ![](https://img.shields.io/badge/function-blue)
 Register extra buttons for a Blizzard system, it will be displayed in a dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
