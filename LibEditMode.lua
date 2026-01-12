@@ -498,7 +498,7 @@ function lib:EnableSystemSetting(systemID, settingName, subSystemID)
 		for _, setting in next, settings do
 			if setting.name == settingName then
 				setting.disabled = false
-				internal.extension:Update(internal.extension.systemID)
+				internal.extension:Update(internal.extension.systemID, internal.extension.subSystemID)
 				break
 			end
 		end
@@ -518,7 +518,7 @@ function lib:DisableSystemSetting(systemID, settingName, subSystemID)
 		for _, setting in next, settings do
 			if setting.name == settingName then
 				setting.disabled = true
-				internal.extension:Update(internal.extension.systemID)
+				internal.extension:Update(internal.extension.systemID, internal.extension.subSystemID)
 				break
 			end
 		end
