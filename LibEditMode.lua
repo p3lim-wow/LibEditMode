@@ -448,12 +448,12 @@ function lib:RefreshFrameSettings(frame)
 	end
 end
 
---[[ LibEditMode:AddSystemSettings(_systemID, settings, subSystemID_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:AddSystemSettings(_systemID, settings[, subSystemID]_) ![](https://img.shields.io/badge/function-blue)
 Register extra settings for a Blizzard system, it will be displayed in an dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
-* `subSystemID`: the ID of a subsystem of a system registered with the Edit Mode. For example, see `Enum.EditModeActionBarSystemIndices`.
+* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See `Enum.EditModeActionBarSystemIndices`.
 --]]
 function lib:AddSystemSettings(systemID, settings, subSystemID)
 	if subSystemID then
@@ -487,12 +487,12 @@ function lib:AddSystemSettings(systemID, settings, subSystemID)
 	end
 end
 
---[[ LibEditMode:EnableSystemSetting(_systemID, settingName, subSystemID_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:EnableSystemSetting(_systemID, settingName[, subSystemID]_) ![](https://img.shields.io/badge/function-blue)
 Enables a setting on a frame.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `settingName`: a setting already registered with [AddSystemSettings](#libeditmodeaddsystemsettingssystemid-settings-)
-* `subSystemID`: the ID of a subsystem of a system registered with the Edit Mode. For example, see `Enum.EditModeActionBarSystemIndices`.
+* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See `Enum.EditModeActionBarSystemIndices`.
 --]]
 function lib:EnableSystemSetting(systemID, settingName, subSystemID)
 	local settings = internal:GetSystemSettings(systemID, subSystemID)
@@ -507,12 +507,12 @@ function lib:EnableSystemSetting(systemID, settingName, subSystemID)
 	end
 end
 
---[[ LibEditMode:DisableSystemSetting(_systemID, settingName, subSystemID_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:DisableSystemSetting(_systemID, settingName[, subSystemID]_) ![](https://img.shields.io/badge/function-blue)
 Disables a setting on a frame.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `settingName`: a setting already registered with [AddSystemSettings](#libeditmodeaddsystemsettingssystemid-settings-)
-* `subSystemID`: the ID of a subsystem of a system registered with the Edit Mode. For example, see `Enum.EditModeActionBarSystemIndices`.
+* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See `Enum.EditModeActionBarSystemIndices`.
 --]]
 function lib:DisableSystemSetting(systemID, settingName, subSystemID)
 	local settings = internal:GetSystemSettings(systemID, subSystemID)
@@ -527,12 +527,12 @@ function lib:DisableSystemSetting(systemID, settingName, subSystemID)
 	end
 end
 
---[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons, subSystemID_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons[, subSystemID]_) ![](https://img.shields.io/badge/function-blue)
 Register extra buttons for a Blizzard system, it will be displayed in a dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `buttons`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
-* `subSystemID`: the ID of a subsystem of a system registered with the Edit Mode. For example, see `Enum.EditModeActionBarSystemIndices`.
+* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See `Enum.EditModeActionBarSystemIndices`.
 --]]
 function lib:AddSystemSettingsButtons(systemID, buttons, subSystemID)
 	if subSystemID then
