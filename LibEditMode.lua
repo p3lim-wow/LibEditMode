@@ -238,28 +238,59 @@ local function onSpecChanged(_, unit)
 end
 
 local function onEditModeLayoutChanged()
-	local layouts = C_EditMode.GetLayouts().layouts
+	local layoutInfo = C_EditMode.GetLayouts()
+	local layouts = layoutInfo.layouts
 
-	for index = #layouts, 1, -1 do
-		if lib.layoutCache[index] then
-			local layout = layouts[index]
-			if lib.layoutCache[index].layoutName ~= layout.layoutName then
+	if #layouts > #lib.layoutCache then
+		-- a layout was created
+
+		for index, layout in next, layouts do
+			if not lib.layoutCache[index] then
+				for _, callback in next, lib.anonCallbacksCreate do
+					securecallfunction(callback, layout.layoutName, index)
+				end
+			end
+		end
+
+		-- the game automatically switches to the newly created layout, which triggers
+		-- onEditModeChanged so we don't have to deal with that
+	elseif #layouts < #lib.layoutCache then
+		-- a layout was deleted
+
+		local newNames = {}
+		for _, layout in next, layouts do
+			newNames[layout.layoutName] = true
+		end
+
+		for _, layout in next, lib.layoutCache do
+			if not newNames[layout.layoutName] then
+				for _, callback in next, lib.anonCallbacksDelete do
+					securecallfunction(callback, layout.layoutName)
+				end
+
+				break
+			end
+		end
+
+		-- if the deleted layout was the current one the game automatically switches to Modern,
+		-- which triggers onEditModeChanged so we don't have to deal with that
+	else
+		-- a layout was renamed
+
+		for index, layout in next, layouts do
+			if layout.layoutName ~= lib.layoutCache[index].layoutName then
 				for _, callback in next, lib.anonCallbacksRename do
 					securecallfunction(callback, lib.layoutCache[index].layoutName, layout.layoutName, index)
 				end
-			end
 
-			table.remove(lib.layoutCache, index)
-		else
-			for _, callback in next, lib.anonCallbacksCreate do
-				securecallfunction(callback, layouts[index].layoutName, index)
-			end
-		end
-	end
+				if index == (lib.activeLayout - 2) then
+					-- the currently active layout was renamed, we trigger a layout update everything
+					onEditModeChanged(nil, layoutInfo)
+					return -- no need to proceed, the remaining tasks are already handled
+				end
 
-	for _, layout in next, lib.layoutCache do
-		for _, callback in next, lib.anonCallbacksDelete do
-			securecallfunction(callback, layout.layoutName)
+				break
+			end
 		end
 	end
 
