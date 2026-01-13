@@ -489,9 +489,9 @@ end
 --[[ LibEditMode:AddSystemSettings(_systemID, settings[, subSystemID]_) ![](https://img.shields.io/badge/function-blue)
 Register extra settings for a Blizzard system, it will be displayed in an dialog attached to the system's dialog in the Edit Mode.
 
-* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
+* `systemID`: the ID of a system registered with the Edit Mode. See [`Enum.EditModeSystem`](https://warcraft.wiki.gg/wiki/EDIT_MODE_LAYOUTS_UPDATED).
 * `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
-* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See `Enum.EditModeActionBarSystemIndices`.
+* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See [`Enum.EditMode...SystemIndices`](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_APIDocumentationGenerated/EditModeManagerConstantsDocumentation.lua).
 --]]
 function lib:AddSystemSettings(systemID, settings, subSystemID)
 	if subSystemID then
@@ -528,9 +528,9 @@ end
 --[[ LibEditMode:EnableSystemSetting(_systemID, settingName[, subSystemID]_) ![](https://img.shields.io/badge/function-blue)
 Enables a setting on a frame.
 
-* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
+* `systemID`: the ID of a system registered with the Edit Mode. See [`Enum.EditModeSystem`](https://warcraft.wiki.gg/wiki/EDIT_MODE_LAYOUTS_UPDATED).
 * `settingName`: a setting already registered with [AddSystemSettings](#libeditmodeaddsystemsettingssystemid-settings-)
-* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See `Enum.EditModeActionBarSystemIndices`.
+* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See [`Enum.EditMode...SystemIndices`](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_APIDocumentationGenerated/EditModeManagerConstantsDocumentation.lua).
 --]]
 function lib:EnableSystemSetting(systemID, settingName, subSystemID)
 	local settings = internal:GetSystemSettings(systemID, subSystemID)
@@ -548,9 +548,9 @@ end
 --[[ LibEditMode:DisableSystemSetting(_systemID, settingName[, subSystemID]_) ![](https://img.shields.io/badge/function-blue)
 Disables a setting on a frame.
 
-* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
+* `systemID`: the ID of a system registered with the Edit Mode. See [`Enum.EditModeSystem`](https://warcraft.wiki.gg/wiki/EDIT_MODE_LAYOUTS_UPDATED).
 * `settingName`: a setting already registered with [AddSystemSettings](#libeditmodeaddsystemsettingssystemid-settings-)
-* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See `Enum.EditModeActionBarSystemIndices`.
+* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See [`Enum.EditMode...SystemIndices`](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_APIDocumentationGenerated/EditModeManagerConstantsDocumentation.lua).
 --]]
 function lib:DisableSystemSetting(systemID, settingName, subSystemID)
 	local settings = internal:GetSystemSettings(systemID, subSystemID)
@@ -568,9 +568,9 @@ end
 --[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons[, subSystemID]_) ![](https://img.shields.io/badge/function-blue)
 Register extra buttons for a Blizzard system, it will be displayed in a dialog attached to the system's dialog in the Edit Mode.
 
-* `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
+* `systemID`: the ID of a system registered with the Edit Mode. See [`Enum.EditModeSystem`](https://warcraft.wiki.gg/wiki/EDIT_MODE_LAYOUTS_UPDATED).
 * `buttons`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
-* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See `Enum.EditModeActionBarSystemIndices`.
+* `subSystemID`: optional ID of a subsystem of a system registered with the Edit Mode. See [`Enum.EditMode...SystemIndices`](https://github.com/Gethe/wow-ui-source/blob/live/Interface/AddOns/Blizzard_APIDocumentationGenerated/EditModeManagerConstantsDocumentation.lua).
 --]]
 function lib:AddSystemSettingsButtons(systemID, buttons, subSystemID)
 	if subSystemID then
