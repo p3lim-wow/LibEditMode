@@ -22,7 +22,9 @@ lib.anonCallbacksRename = lib.anonCallbacksRename or {}
 lib.anonCallbacksDelete = lib.anonCallbacksDelete or {}
 
 lib.systemSettings = lib.systemSettings or {}
+lib.subSystemSettings = lib.subSystemSettings or {}
 lib.systemButtons = lib.systemButtons or {}
+lib.subSystemButtons = lib.subSystemButtons or {}
 
 lib.layoutCache = lib.layoutCache or {}
 
@@ -289,8 +291,11 @@ local function hookManager()
 		end
 
 		local systemID = systemFrame.system
-		if lib.systemSettings[systemID] or lib.systemButtons[systemID] then
-			internal.extension:Update(systemID)
+		local subSystemID = systemFrame.systemIndex
+		local isKnownSystem = lib.systemSettings[systemID] or lib.systemButtons[systemID]
+		local isKnownSubSystem = subSystemID and ((lib.subSystemSettings[systemID] and lib.subSystemSettings[systemID][subSystemID]) or (lib.subSystemButtons[systemID] and lib.subSystemButtons[systemID][subSystemID]))
+		if isKnownSystem or isKnownSubSystem then
+			internal.extension:Update(systemID, isKnownSubSystem and subSystemID or nil)
 		end
 	end)
 
@@ -443,20 +448,34 @@ function lib:RefreshFrameSettings(frame)
 	end
 end
 
---[[ LibEditMode:AddSystemSettings(_systemID, settings_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:AddSystemSettings(_systemID, settings, subSystemID_) ![](https://img.shields.io/badge/function-blue)
 Register extra settings for a Blizzard system, it will be displayed in an dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `settings`: table containing [SettingObject](Types#settingobject) entries _(table, number indexed)_
+* `subSystemID`: the ID of a subsystem of a system registered with the Edit Mode. For example, see `Enum.EditModeActionBarSystemIndices`.
 --]]
-function lib:AddSystemSettings(systemID, settings)
-	if not lib.systemSettings[systemID] then
-		lib.systemSettings[systemID] = {}
-	end
+function lib:AddSystemSettings(systemID, settings, subSystemID)
+	if subSystemID then
+		if not lib.subSystemSettings[systemID] then
+			lib.subSystemSettings[systemID] = {}
+		end
 
-	-- while not ideal allow multiple addons to add their settings
-	for _, setting in next, settings do
-		table.insert(lib.systemSettings[systemID], setting)
+		if not lib.subSystemSettings[systemID][subSystemID] then
+			lib.subSystemSettings[systemID][subSystemID] = {}
+		end
+
+		for _, setting in next, settings do
+			table.insert(lib.subSystemSettings[systemID][subSystemID], setting)
+		end
+	else
+		if not lib.systemSettings[systemID] then
+			lib.systemSettings[systemID] = {}
+		end
+
+		for _, setting in next, settings do
+			table.insert(lib.systemSettings[systemID], setting)
+		end
 	end
 
 	if not internal.extension then
@@ -468,57 +487,74 @@ function lib:AddSystemSettings(systemID, settings)
 	end
 end
 
---[[ LibEditMode:EnableSystemSetting(_systemID, settingName_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:EnableSystemSetting(_systemID, settingName, subSystemID_) ![](https://img.shields.io/badge/function-blue)
 Enables a setting on a frame.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `settingName`: a setting already registered with [AddSystemSettings](#libeditmodeaddsystemsettingssystemid-settings-)
+* `subSystemID`: the ID of a subsystem of a system registered with the Edit Mode. For example, see `Enum.EditModeActionBarSystemIndices`.
 --]]
-function lib:EnableSystemSetting(systemID, settingName)
-	local settings = internal:GetSystemSettings(systemID)
+function lib:EnableSystemSetting(systemID, settingName, subSystemID)
+	local settings = internal:GetSystemSettings(systemID, subSystemID)
 	if settings then
 		for _, setting in next, settings do
 			if setting.name == settingName then
 				setting.disabled = false
-				internal.extension:Update(internal.extension.systemID)
+				internal.extension:Update(internal.extension.systemID, internal.extension.subSystemID)
 				break
 			end
 		end
 	end
 end
 
---[[ LibEditMode:DisableSystemSetting(_systemID, settingName_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:DisableSystemSetting(_systemID, settingName, subSystemID_) ![](https://img.shields.io/badge/function-blue)
 Disables a setting on a frame.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `settingName`: a setting already registered with [AddSystemSettings](#libeditmodeaddsystemsettingssystemid-settings-)
+* `subSystemID`: the ID of a subsystem of a system registered with the Edit Mode. For example, see `Enum.EditModeActionBarSystemIndices`.
 --]]
-function lib:DisableSystemSetting(systemID, settingName)
-	local settings = internal:GetSystemSettings(systemID)
+function lib:DisableSystemSetting(systemID, settingName, subSystemID)
+	local settings = internal:GetSystemSettings(systemID, subSystemID)
 	if settings then
 		for _, setting in next, settings do
 			if setting.name == settingName then
 				setting.disabled = true
-				internal.extension:Update(internal.extension.systemID)
+				internal.extension:Update(internal.extension.systemID, internal.extension.subSystemID)
 				break
 			end
 		end
 	end
 end
 
---[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons_) ![](https://img.shields.io/badge/function-blue)
+--[[ LibEditMode:AddSystemSettingsButtons(_systemID, buttons, subSystemID_) ![](https://img.shields.io/badge/function-blue)
 Register extra buttons for a Blizzard system, it will be displayed in a dialog attached to the system's dialog in the Edit Mode.
 
 * `systemID`: the ID of a system registered with the Edit Mode. See `Enum.EditModeSystem`.
 * `buttons`: table containing [ButtonObject](Types#buttonobject) entries _(table, number indexed)_
+* `subSystemID`: the ID of a subsystem of a system registered with the Edit Mode. For example, see `Enum.EditModeActionBarSystemIndices`.
 --]]
-function lib:AddSystemSettingsButtons(systemID, buttons)
-	if not lib.systemButtons[systemID] then
-		lib.systemButtons[systemID] = {}
-	end
+function lib:AddSystemSettingsButtons(systemID, buttons, subSystemID)
+	if subSystemID then
+		if not lib.subSystemButtons[systemID] then
+			lib.subSystemButtons[systemID] = {}
+		end
 
-	for _, button in next, buttons do
-		table.insert(lib.systemButtons[systemID], button)
+		if not lib.subSystemButtons[systemID][subSystemID] then
+			lib.subSystemButtons[systemID][subSystemID] = {}
+		end
+
+		for _, setting in next, buttons do
+			table.insert(lib.subSystemButtons[systemID][subSystemID], setting)
+		end
+	else
+		if not lib.systemButtons[systemID] then
+			lib.systemButtons[systemID] = {}
+		end
+
+		for _, button in next, buttons do
+			table.insert(lib.systemButtons[systemID], button)
+		end
 	end
 
 	if not internal.extension then
@@ -649,16 +685,20 @@ function internal:MoveParent(selection, x, y)
 	updatePosition(selection, x, y)
 end
 
-function internal:GetSystemSettings(systemID)
-	if lib.systemSettings[systemID] then
+function internal:GetSystemSettings(systemID, subSystemID)
+	if subSystemID and lib.subSystemSettings[systemID] and lib.subSystemSettings[systemID][subSystemID] then
+		return lib.subSystemSettings[systemID][subSystemID], #lib.subSystemSettings[systemID][subSystemID]
+	elseif lib.systemSettings[systemID] then
 		return lib.systemSettings[systemID], #lib.systemSettings[systemID]
 	else
 		return nil, 0
 	end
 end
 
-function internal:GetSystemSettingsButtons(systemID)
-	if lib.systemButtons[systemID] then
+function internal:GetSystemSettingsButtons(systemID, subSystemID)
+	if subSystemID and lib.subSystemButtons[systemID] and lib.subSystemButtons[systemID][subSystemID] then
+		return lib.subSystemButtons[systemID][subSystemID], #lib.subSystemButtons[systemID][subSystemID]
+	elseif lib.systemButtons[systemID] then
 		return lib.systemButtons[systemID], #lib.systemButtons[systemID]
 	else
 		return nil, 0
