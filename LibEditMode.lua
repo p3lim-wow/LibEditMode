@@ -630,7 +630,7 @@ Possible events:
         * `layoutIndex`: index of the layout
 * `delete`: triggered when a Edit Mode layout has been deleted
     * signature:
-        *`layoutName`: name of the layout that got deleted
+        * `layoutName`: name of the layout that got deleted
 --]]
 function lib:RegisterCallback(event, callback)
 	assert(event and type(event) == 'string', 'event must be a string')
