@@ -631,6 +631,14 @@ Possible events:
 * `delete`: triggered when a Edit Mode layout has been deleted
     * signature:
         * `layoutName`: name of the layout that got deleted
+
+Example:
+
+```lua
+LibEditMode:RegisterCallback('rename', function(oldLayoutName, newLayoutName, layoutIndex)
+    -- do something
+end)
+
 --]]
 function lib:RegisterCallback(event, callback)
 	assert(event and type(event) == 'string', 'event must be a string')
