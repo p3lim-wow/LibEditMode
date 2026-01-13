@@ -237,6 +237,7 @@ local function onSpecChanged(_, unit)
 	onEditModeChanged(nil, C_EditMode.GetLayouts())
 end
 
+local layoutCopySource
 local function onEditModeLayoutChanged()
 	local layoutInfo = C_EditMode.GetLayouts()
 	local layouts = layoutInfo.layouts
@@ -247,7 +248,7 @@ local function onEditModeLayoutChanged()
 		for index, layout in next, layouts do
 			if not lib.layoutCache[index] then
 				for _, callback in next, lib.anonCallbacksCreate do
-					securecallfunction(callback, layout.layoutName, index)
+					securecallfunction(callback, layout.layoutName, index, layoutCopySource and layoutCopySource.layoutName)
 				end
 			end
 		end
@@ -294,6 +295,7 @@ local function onEditModeLayoutChanged()
 		end
 	end
 
+	layoutCopySource = nil
 	lib.layoutCache = layouts
 end
 
@@ -328,6 +330,10 @@ local function hookManager()
 		if isKnownSystem or isKnownSubSystem then
 			internal.extension:Update(systemID, isKnownSubSystem and subSystemID or nil)
 		end
+	end)
+
+	hooksecurefunc(EditModeManagerFrame, 'ShowNewLayoutDialog', function(_, sourceLayout)
+		layoutCopySource = sourceLayout
 	end)
 
 	-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
@@ -615,6 +621,7 @@ Possible events:
     * signature:
         * `layoutName`: name of the new layout
         * `layoutIndex`: index of the layout
+        * `sourceLayoutName`: name of the layout it was copied from, if it was copied
 * `rename`: triggered when a Edit Mode layout has been renamed
     * signature:
         * `oldLayoutName`: name of the layout that got renamed
