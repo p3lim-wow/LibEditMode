@@ -285,7 +285,8 @@ local function onEditModeLayoutChanged()
 				end
 
 				if index == (lib.activeLayout - 2) then
-					-- the currently active layout was renamed, we trigger a layout update everything
+					-- the currently active layout was renamed, we trigger a layout update
+					lib.activeLayout = nil
 					onEditModeChanged(nil, layoutInfo)
 					return -- no need to proceed, the remaining tasks are already handled
 				end
