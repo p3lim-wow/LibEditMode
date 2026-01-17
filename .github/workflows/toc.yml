@@ -17,6 +17,9 @@ jobs:
         with:
           beta: true
           ptr: true
+          flavor: |
+            retail
+            tbc
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
