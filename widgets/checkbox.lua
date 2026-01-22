@@ -18,7 +18,7 @@ local checkboxMixin = {}
 function checkboxMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.name)
-	self:SetEnabled(not data.disabled)
+	self:Refresh()
 
 	local value = data.get(lib:GetActiveLayoutName())
 	if value == nil then
@@ -29,10 +29,29 @@ function checkboxMixin:Setup(data)
 	self.Button:SetChecked(not not value) -- force boolean
 end
 
+function checkboxMixin:Refresh()
+	local data = self.setting
+	local isEnabled = not data.disabled
+	if type(data.disabled) == 'function' then
+		isEnabled = not data.disabled(lib:GetActiveLayoutName())
+	end
+
+	self:SetEnabled(isEnabled)
+
+	local isShown = not data.hidden
+	if type(data.hidden) == 'function' then
+		isShown = not data.hidden(lib:GetActiveLayoutName())
+	end
+
+	self:SetShown(isShown)
+end
+
 function checkboxMixin:OnCheckButtonClick()
 	PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
 	self.checked = not self.checked
 	self.setting.set(lib:GetActiveLayoutName(), not not self.checked, false)
+
+	self:GetParent():GetParent():Refresh()
 end
 
 function checkboxMixin:SetEnabled(enabled)

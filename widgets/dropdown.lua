@@ -33,13 +33,15 @@ end
 
 local function set(data)
 	data.set(lib:GetActiveLayoutName(), data.value, false)
+
+	data.widget:GetParent():GetParent():Refresh()
 end
 
 local dropdownMixin = {}
 function dropdownMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.name)
-	self:SetEnabled(not data.disabled)
+	self:Refresh()
 
 	if data.generator then
 		-- let the user have full control
@@ -59,6 +61,7 @@ function dropdownMixin:Setup(data)
 						set = data.set,
 						value = value.value or value.text,
 						multiple = data.multiple,
+						widget = self,
 					})
 				else
 					rootDescription:CreateRadio(value.text, get, set, {
@@ -66,11 +69,29 @@ function dropdownMixin:Setup(data)
 						set = data.set,
 						value = value.value or value.text,
 						multiple = data.multiple,
+						widget = self,
 					})
 				end
 			end
 		end)
 	end
+end
+
+function dropdownMixin:Refresh()
+	local data = self.setting
+	local isEnabled = not data.disabled
+	if type(data.disabled) == 'function' then
+		isEnabled = not data.disabled(lib:GetActiveLayoutName())
+	end
+
+	self:SetEnabled(isEnabled)
+
+	local isShown = not data.hidden
+	if type(data.hidden) == 'function' then
+		isShown = not data.hidden(lib:GetActiveLayoutName())
+	end
+
+	self:SetShown(isShown)
 end
 
 function dropdownMixin:SetEnabled(enabled)

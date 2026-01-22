@@ -29,17 +29,30 @@ function extensionMixin:Update(systemID, subSystemID)
 	self:Layout()
 end
 
+function extensionMixin:Refresh()
+	for _, widget in next, self.Settings.widgets do
+		if widget.Refresh then
+			widget:Refresh()
+		end
+	end
+
+	self:Layout()
+end
+
 function extensionMixin:UpdateSettings()
+	self.Settings.widgets = table.wipe(self.Settings.widgets or {})
+
 	local settings, num = internal:GetSystemSettings(self.systemID, self.subSystemID)
 	local isEmpty = num == 0
 	if not isEmpty then
 		for index, data in next, settings do
 			local pool = internal:GetPool(data.kind)
 			if pool then
-				local setting = pool:Acquire(self.Settings)
-				setting.layoutIndex = index
-				setting:Setup(data)
-				setting:Show()
+				local widget = pool:Acquire(self.Settings)
+				widget.layoutIndex = index
+				widget:Setup(data)
+
+				table.insert(self.Settings.widgets, widget)
 			end
 		end
 	end

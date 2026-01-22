@@ -18,7 +18,7 @@ local sliderMixin = {}
 function sliderMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.name)
-	self:SetEnabled(not data.disabled)
+	self:Refresh()
 
 	self.initInProgress = true
 	self.formatters = {}
@@ -30,9 +30,28 @@ function sliderMixin:Setup(data)
 	self.initInProgress = false
 end
 
+function sliderMixin:Refresh()
+	local data = self.setting
+	local isEnabled = not data.disabled
+	if type(data.disabled) == 'function' then
+		isEnabled = not data.disabled(lib:GetActiveLayoutName())
+	end
+
+	self:SetEnabled(isEnabled)
+
+	local isShown = not data.hidden
+	if type(data.hidden) == 'function' then
+		isShown = not data.hidden(lib:GetActiveLayoutName())
+	end
+
+	self:SetShown(isShown)
+end
+
 function sliderMixin:OnSliderValueChanged(value)
 	if not self.initInProgress then
 		self.setting.set(lib:GetActiveLayoutName(), value, false)
+
+		self:GetParent():GetParent():Refresh()
 	end
 end
 

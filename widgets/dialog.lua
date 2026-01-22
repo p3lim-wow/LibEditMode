@@ -26,18 +26,31 @@ function dialogMixin:Update(selection)
 	self:Layout()
 end
 
+function dialogMixin:Refresh()
+	for _, widget in next, self.Settings.widgets do
+		if widget.Refresh then
+			widget:Refresh()
+		end
+	end
+
+	self:Layout()
+end
+
 function dialogMixin:UpdateSettings()
 	internal.ReleaseAllPools()
+
+	self.Settings.widgets = table.wipe(self.Settings.widgets or {})
 
 	local settings, num = internal:GetFrameSettings(self.selection.parent)
 	if num > 0 then
 		for index, data in next, settings do
 			local pool = internal:GetPool(data.kind)
 			if pool then
-				local setting = pool:Acquire(self.Settings)
-				setting.layoutIndex = index
-				setting:Setup(data)
-				setting:Show()
+				local widget = pool:Acquire(self.Settings)
+				widget.layoutIndex = index
+				widget:Setup(data)
+
+				table.insert(self.Settings.widgets, widget)
 			end
 		end
 	end

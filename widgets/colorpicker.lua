@@ -32,7 +32,7 @@ local colorPickerMixin = {}
 function colorPickerMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.name)
-	self:SetEnabled(not data.disabled)
+	self:Refresh()
 
 	local value = data.get(lib:GetActiveLayoutName())
 	if value == nil then
@@ -54,6 +54,23 @@ function colorPickerMixin:Setup(data)
 	self.Swatch:SetColorRGB(r, g, b)
 end
 
+function colorPickerMixin:Refresh()
+	local data = self.setting
+	local isEnabled = not data.disabled
+	if type(data.disabled) == 'function' then
+		isEnabled = not data.disabled(lib:GetActiveLayoutName())
+	end
+
+	self:SetEnabled(isEnabled)
+
+	local isShown = not data.hidden
+	if type(data.hidden) == 'function' then
+		isShown = not data.hidden(lib:GetActiveLayoutName())
+	end
+
+	self:SetShown(isShown)
+end
+
 function colorPickerMixin:OnColorChanged(color)
 	self.setting.set(lib:GetActiveLayoutName(), color, false)
 
@@ -65,6 +82,8 @@ function colorPickerMixin:OnColorChanged(color)
 	self.colorInfo.g = g
 	self.colorInfo.b = b
 	self.colorInfo.opacity = a
+
+	self:GetParent():GetParent():Refresh()
 end
 
 function colorPickerMixin:SetEnabled(enabled)
