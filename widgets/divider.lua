@@ -10,6 +10,16 @@ local dividerMixin = {}
 function dividerMixin:Setup(data)
 	self.setting = data
 	self.Label:SetText(data.hideLabel and '' or data.name)
+	self:Refresh()
+end
+
+function dividerMixin:Refresh()
+	local data = self.setting
+	if type(data.hidden) == 'function' then
+		self:SetShown(not data.hidden(lib:GetActiveLayoutName()))
+	else
+		self:SetShown(not data.hidden)
+	end
 end
 
 lib.internal:CreatePool(lib.SettingType.Divider, function()

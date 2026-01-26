@@ -60,6 +60,7 @@ read_globals = {
 	'PlaySound',
 	'hooksecurefunc',
 	'securecallfunction',
+	table = {fields = {'wipe'}},
 
 	-- exposed from other addons
 	'LibStub',
