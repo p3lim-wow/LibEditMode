@@ -8,6 +8,10 @@ end
 lib.internal = {} -- internal methods, do not use directly
 local internal = lib.internal
 
+-- keep a variable stored for the latest version, used to avoid hooks and events
+-- firing for older versions of the library when it has been "globally" upgraded with LibStub
+lib.hookVersion = MINOR
+
 lib.frameSelections = lib.frameSelections or {}
 lib.frameCallbacks = lib.frameCallbacks or {}
 lib.frameDefaults = lib.frameDefaults or {}
@@ -237,7 +241,6 @@ local function onSpecChanged(_, unit)
 	onEditModeChanged(nil, C_EditMode.GetLayouts())
 end
 
-local layoutCopySource
 local function onEditModeLayoutChanged()
 	local layoutInfo = C_EditMode.GetLayouts()
 	local layouts = layoutInfo.layouts
@@ -248,7 +251,7 @@ local function onEditModeLayoutChanged()
 		for index, layout in next, layouts do
 			if not lib.layoutCache[index] then
 				for _, callback in next, lib.anonCallbacksCreate do
-					securecallfunction(callback, layout.layoutName, index, layoutCopySource and layoutCopySource.layoutName)
+					securecallfunction(callback, layout.layoutName, index, lib._layoutCopySource and lib._layoutCopySource.layoutName)
 				end
 			end
 		end
@@ -296,53 +299,73 @@ local function onEditModeLayoutChanged()
 		end
 	end
 
-	layoutCopySource = nil
+	lib._layoutCopySource = nil
 	lib.layoutCache = layouts
 end
 
-local isManagerHooked = false
-
-local function hookManager()
+do -- deal with hooks and events
 	-- listen for layout changes
-	EventRegistry:RegisterFrameEventAndCallback('EDIT_MODE_LAYOUTS_UPDATED', onEditModeChanged)
-	EventRegistry:RegisterFrameEventAndCallback('PLAYER_SPECIALIZATION_CHANGED', onSpecChanged)
-	EventRegistry:RegisterCallback('EditMode.SavedLayouts', onEditModeLayoutChanged)
+	EventRegistry:RegisterFrameEventAndCallback('EDIT_MODE_LAYOUTS_UPDATED', function(...)
+		if lib.hookVersion == MINOR then
+			onEditModeChanged(...)
+		end
+	end)
+
+	EventRegistry:RegisterFrameEventAndCallback('PLAYER_SPECIALIZATION_CHANGED', function(...)
+		if lib.hookVersion == MINOR then
+			onSpecChanged(...)
+		end
+	end)
+	EventRegistry:RegisterCallback('EditMode.SavedLayouts', function(...)
+		if lib.hookVersion == MINOR then
+			onEditModeLayoutChanged(...)
+		end
+	end)
 
 	-- hook EditMode shown state, since QuickKeybindMode will hide/show EditMode
-	EditModeManagerFrame:HookScript('OnShow', onEditModeEnter)
-	EditModeManagerFrame:HookScript('OnHide', onEditModeExit)
+	EditModeManagerFrame:HookScript('OnShow', function(...)
+		if lib.hookVersion == MINOR then
+			onEditModeEnter(...)
+		end
+	end)
+	EditModeManagerFrame:HookScript('OnHide', function(...)
+		if lib.hookVersion == MINOR then
+			onEditModeExit(...)
+		end
+	end)
 
 	-- we don't want any custom frames dangling around
-	EditModeSystemSettingsDialog:HookScript('OnHide', resetDialogs)
+	EditModeSystemSettingsDialog:HookScript('OnHide', function(...)
+		if lib.hookVersion == MINOR then
+			resetDialogs(...)
+		end
+	end)
 
 	-- unselect our selections whenever a system is selected and try to add an extension
 	hooksecurefunc(EditModeManagerFrame, 'SelectSystem', function(_, systemFrame)
-		resetDialogs()
-		resetSelection()
+		if lib.hookVersion == MINOR then
+			resetDialogs()
+			resetSelection()
 
-		if internal.dialog then
-			internal.dialog:Reset()
-		end
+			if internal.dialog then
+				internal.dialog:Reset()
+			end
 
-		local systemID = systemFrame.system
-		local subSystemID = systemFrame.systemIndex
-		local isKnownSystem = lib.systemSettings[systemID] or lib.systemButtons[systemID]
-		local isKnownSubSystem = subSystemID and ((lib.subSystemSettings[systemID] and lib.subSystemSettings[systemID][subSystemID]) or (lib.subSystemButtons[systemID] and lib.subSystemButtons[systemID][subSystemID]))
-		if isKnownSystem or isKnownSubSystem then
-			internal.extension:Update(systemID, isKnownSubSystem and subSystemID or nil)
+			local systemID = systemFrame.system
+			local subSystemID = systemFrame.systemIndex
+			local isKnownSystem = lib.systemSettings[systemID] or lib.systemButtons[systemID]
+			local isKnownSubSystem = subSystemID and ((lib.subSystemSettings[systemID] and lib.subSystemSettings[systemID][subSystemID]) or (lib.subSystemButtons[systemID] and lib.subSystemButtons[systemID][subSystemID]))
+			if isKnownSystem or isKnownSubSystem then
+				internal.extension:Update(systemID, isKnownSubSystem and subSystemID or nil)
+			end
 		end
 	end)
 
 	hooksecurefunc(EditModeManagerFrame, 'ShowNewLayoutDialog', function(_, sourceLayout)
-		layoutCopySource = sourceLayout
+		if lib.hookVersion == MINOR then
+			lib._layoutCopySource = sourceLayout
+		end
 	end)
-
-	-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
-	if lib.layoutCache then
-		onEditModeChanged(nil, C_EditMode.GetLayouts()) -- introduces a little latency
-	end
-
-	isManagerHooked = true
 end
 
 --[[ LibEditMode:AddFrame(_frame, callback, default_) ![](https://img.shields.io/badge/function-blue)
@@ -385,8 +408,9 @@ function lib:AddFrame(frame, callback, default, name)
 			resetSelection()
 		end)
 
-		if not isManagerHooked then
-			hookManager()
+		-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
+		if lib.layoutCache then
+			onEditModeChanged(nil, C_EditMode.GetLayouts()) -- introduces a little latency
 		end
 	end
 end
@@ -520,8 +544,9 @@ function lib:AddSystemSettings(systemID, settings, subSystemID)
 		internal.extension = internal:CreateExtension()
 	end
 
-	if not isManagerHooked then
-		hookManager()
+	-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
+	if lib.layoutCache then
+		onEditModeChanged(nil, C_EditMode.GetLayouts()) -- introduces a little latency
 	end
 end
 
@@ -599,8 +624,9 @@ function lib:AddSystemSettingsButtons(systemID, buttons, subSystemID)
 		internal.extension = internal:CreateExtension()
 	end
 
-	if not isManagerHooked then
-		hookManager()
+	-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
+	if lib.layoutCache then
+		onEditModeChanged(nil, C_EditMode.GetLayouts()) -- introduces a little latency
 	end
 end
 
