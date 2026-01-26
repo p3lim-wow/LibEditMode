@@ -38,8 +38,8 @@ function expanderMixin:SetExpandedState(expanded)
 	data.set(lib:GetActiveLayoutName(), expanded, false)
 
 	local text = data.name
-	if data.textExpanded and data.textCollapsed then
-		text = expanded and data.textExpanded or data.textCollapsed
+	if data.expandedLabel and data.collapsedLabel then
+		text = expanded and data.expandedLabel or data.collapsedLabel
 	end
 
 	if not data.hideArrow then
