@@ -15,6 +15,7 @@ end
 lib.internal:CreatePool(lib.SettingType.Divider, function()
 	local frame = Mixin(CreateFrame('Frame', nil, UIParent), dividerMixin)
 	frame:SetSize(330, 16)
+	frame.align = "center"
 
 	local texture = frame:CreateTexture(nil, 'ARTWORK')
 	texture:SetAllPoints()
