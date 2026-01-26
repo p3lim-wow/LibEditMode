@@ -21,6 +21,9 @@ exclude_files = {
 }
 
 read_globals = {
+	-- stdlib
+	table = {fields = {'wipe'}},
+
 	-- FrameXML objects
 	'ColorPickerFrame',
 	'CreateUnsecuredObjectPool',
@@ -60,7 +63,6 @@ read_globals = {
 	'PlaySound',
 	'hooksecurefunc',
 	'securecallfunction',
-	table = {fields = {'wipe'}},
 
 	-- exposed from other addons
 	'LibStub',

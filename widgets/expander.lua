@@ -6,8 +6,8 @@ end
 
 lib.SettingType.Expander = 'expander'
 
-local ARROW_UP = " |A:editmode-up-arrow:16:11:0:3|a"
-local ARROW_DOWN = " |A:editmode-down-arrow:16:11:0:-4|a"
+local ARROW_UP = ' |A:editmode-up-arrow:16:11:0:3|a'
+local ARROW_DOWN = ' |A:editmode-down-arrow:16:11:0:-4|a'
 
 local expanderMixin = {}
 function expanderMixin:Setup(data)
@@ -42,7 +42,7 @@ function expanderMixin:SetExpandedState(expanded)
 		text = expanded and data.textExpanded or data.textCollapsed
 	end
 
-	if data.appendArrow then
+	if not data.hideArrow then
 		text = text .. (expanded and ARROW_UP or ARROW_DOWN)
 	end
 
@@ -60,18 +60,18 @@ lib.internal:CreatePool(lib.SettingType.Expander, function()
 	local frame = Mixin(CreateFrame('Frame', nil, UIParent), expanderMixin)
 	frame:SetScript('OnMouseUp', frame.OnMouseUp)
 	frame:SetSize(330, 34)
-	frame.align = "center"
+	frame.align = 'center'
 
 	local texture = frame:CreateTexture(nil, 'ARTWORK')
 	texture:SetTexture([[Interface\FriendsFrame\UI-FriendsFrame-OnlineDivider]])
 	texture:SetSize(330, 16)
-	texture:SetPoint("TOP", 0, 0)
+	texture:SetPoint('TOP', 0, 0)
 	frame.Divider = texture
 
 	local label = frame:CreateFontString(nil, nil, 'GameFontHighlightMedium')
-	label:SetJustifyH("CENTER")
-	label:SetJustifyV("MIDDLE")
-	label:SetPoint("TOP", 0, -11)
+	label:SetJustifyH('CENTER')
+	label:SetJustifyV('MIDDLE')
+	label:SetPoint('TOP', 0, -11)
 	frame.Label = label
 
 	return frame
