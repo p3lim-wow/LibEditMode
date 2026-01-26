@@ -15,12 +15,11 @@ end
 
 function dividerMixin:Refresh()
 	local data = self.setting
-	local isShown = not data.hidden
 	if type(data.hidden) == 'function' then
-		isShown = not data.hidden(lib:GetActiveLayoutName())
+		self:SetShown(not data.hidden(lib:GetActiveLayoutName()))
+	else
+		self:SetShown(not data.hidden)
 	end
-
-	self:SetShown(isShown)
 end
 
 lib.internal:CreatePool(lib.SettingType.Divider, function()

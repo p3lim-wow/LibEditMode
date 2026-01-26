@@ -79,19 +79,17 @@ end
 
 function dropdownMixin:Refresh()
 	local data = self.setting
-	local isEnabled = not data.disabled
 	if type(data.disabled) == 'function' then
-		isEnabled = not data.disabled(lib:GetActiveLayoutName())
+		self:SetEnabled(not data.disabled(lib:GetActiveLayoutName()))
+	else
+		self:SetEnabled(not data.disabled)
 	end
 
-	self:SetEnabled(isEnabled)
-
-	local isShown = not data.hidden
 	if type(data.hidden) == 'function' then
-		isShown = not data.hidden(lib:GetActiveLayoutName())
+		self:SetShown(not data.hidden(lib:GetActiveLayoutName()))
+	else
+		self:SetShown(not data.hidden)
 	end
-
-	self:SetShown(isShown)
 end
 
 function dropdownMixin:SetEnabled(enabled)
