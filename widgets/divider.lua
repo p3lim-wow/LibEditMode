@@ -9,7 +9,7 @@ lib.SettingType.Divider = 'divider'
 local dividerMixin = {}
 function dividerMixin:Setup(data)
 	self.setting = data
-	self.Label:SetText(data.name)
+	self.Label:SetText(data.hideLabel and '' or data.name)
 end
 
 lib.internal:CreatePool(lib.SettingType.Divider, function()
