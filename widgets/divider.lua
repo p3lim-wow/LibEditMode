@@ -21,7 +21,7 @@ lib.internal:CreatePool(lib.SettingType.Divider, function()
 	texture:SetAllPoints()
 	texture:SetTexture([[Interface\FriendsFrame\UI-FriendsFrame-OnlineDivider]])
 
-	local label = frame:CreateFontString(nil, nil, 'GameFontHighlightLarge')
+	local label = frame:CreateFontString(nil, nil, 'GameFontHighlightMedium')
 	label:SetAllPoints()
 	frame.Label = label
 
