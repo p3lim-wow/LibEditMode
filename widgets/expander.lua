@@ -60,6 +60,7 @@ lib.internal:CreatePool(lib.SettingType.Expander, function()
 	local frame = Mixin(CreateFrame('Frame', nil, UIParent), expanderMixin)
 	frame:SetScript('OnMouseUp', frame.OnMouseUp)
 	frame:SetSize(330, 34)
+	frame.align = "center"
 
 	local texture = frame:CreateTexture(nil, 'ARTWORK')
 	texture:SetTexture([[Interface\FriendsFrame\UI-FriendsFrame-OnlineDivider]])
