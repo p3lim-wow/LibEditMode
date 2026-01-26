@@ -26,7 +26,7 @@ function dialogMixin:Update(selection)
 	self:Layout()
 end
 
-function dialogMixin:Refresh()
+function dialogMixin:RefreshWidgets()
 	for _, widget in next, self.Settings.widgets do
 		if widget.Refresh then
 			widget:Refresh()

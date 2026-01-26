@@ -49,7 +49,7 @@ function checkboxMixin:OnCheckButtonClick()
 	self.checked = not self.checked
 	self.setting.set(lib:GetActiveLayoutName(), not not self.checked, false)
 
-	self:GetParent():GetParent():Refresh()
+	self:GetParent():GetParent():RefreshWidgets()
 end
 
 function checkboxMixin:SetEnabled(enabled)

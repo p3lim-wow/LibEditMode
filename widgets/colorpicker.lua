@@ -81,7 +81,7 @@ function colorPickerMixin:OnColorChanged(color)
 	self.colorInfo.b = b
 	self.colorInfo.opacity = a
 
-	self:GetParent():GetParent():Refresh()
+	self:GetParent():GetParent():RefreshWidgets()
 end
 
 function colorPickerMixin:SetEnabled(enabled)

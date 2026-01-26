@@ -49,7 +49,7 @@ function sliderMixin:OnSliderValueChanged(value)
 	if not self.initInProgress then
 		self.setting.set(lib:GetActiveLayoutName(), value, false)
 
-		self:GetParent():GetParent():Refresh()
+		self:GetParent():GetParent():RefreshWidgets()
 	end
 end
 

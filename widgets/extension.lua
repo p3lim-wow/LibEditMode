@@ -29,7 +29,7 @@ function extensionMixin:Update(systemID, subSystemID)
 	self:Layout()
 end
 
-function extensionMixin:Refresh()
+function extensionMixin:RefreshWidgets()
 	for _, widget in next, self.Settings.widgets do
 		if widget.Refresh then
 			widget:Refresh()

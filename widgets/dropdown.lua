@@ -34,7 +34,7 @@ end
 local function set(data)
 	data.set(lib:GetActiveLayoutName(), data.value, false)
 
-	data.widget:GetParent():GetParent():Refresh()
+	data.widget:GetParent():GetParent():RefreshWidgets()
 end
 
 local dropdownMixin = {}
