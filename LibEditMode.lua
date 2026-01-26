@@ -766,11 +766,13 @@ Table containing the following entries:
 | default  | default value for the setting          | any                         | yes      |
 | get      | getter for the current value           | function                    | yes      |
 | set      | setter for the new value               | function                    | yes      |
-| disabled | whether the setting should be disabled | boolean                     | no       |
+| disabled | whether the setting should be disabled | boolean/function            | no       |
+| hidden   | whether the setting should be hidden   | boolean/function            | no       |
 
 - The getter passes `layoutName` as the sole argument and expects a value in return.
 - The setter passes (`layoutName`, `newValue`, `fromReset`) and expects no returns.
 - The description is shown in a tooltip.
+- The `disabled` and `hidden` options, if added as functions, must return a boolean
 
 Depending on the setting type there are additional required and optional entries:
 
@@ -817,6 +819,22 @@ Table containing the following entries:
 The `default` field and the getter expects a [ColorMixin](https://warcraft.wiki.gg/wiki/ColorMixin) object, and the setter will pass one as its value.  
 Even if `hasOpacity` is set to `false` (which is the default value) the ColorMixin object will contain an alpha value, this is the default behavior of the ColorMixin.
 
+### Divider
+
+| key       | value                            | type    | required | default |
+|:----------|:---------------------------------|:--------|:---------|:--------|
+| hideLabel | whether or not to hide the label | boolean | no       | false   |
+
+### Expander
+
+| key            | value                            | type    | required | default |
+|:---------------|:---------------------------------|:--------|:---------|:--------|
+| hideArrow      | whether or not to hide the arrow | boolean | no       | false   |
+| expandedLabel  | text to display when expanded    | string  | no       |         |
+| collapsedLabel | text to display when collapsed   | string  | no       |         |
+
+For `expandedLabel` or `collapsedLabel` to work _both_ have to be defined. Otherwise the setting `name` will be used.
+
 ## ButtonObject ![](https://img.shields.io/badge/object-teal)
 
 Table containing the following entries:
@@ -835,6 +853,7 @@ One of:
 - `Slider`
 - `Divider`
 - `ColorPicker`
+- `Expander`
 --]]
 lib.SettingType = CopyTable(Enum.EditModeSettingDisplayType)
 lib.SettingType.ColorPicker = 10 -- leave some room for blizzard expansion
