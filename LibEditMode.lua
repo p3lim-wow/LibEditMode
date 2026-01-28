@@ -173,9 +173,8 @@ local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSy
 		return
 	end
 
-	resetDialogs()
-	resetSelection()
-	EditModeManagerFrame:ClearSelectedSystem() -- possible taint
+	EventRegistry:TriggerEvent('EditModeExternal.hideDialog')
+	EditModeManagerFrame:ClearSelectedSystem() -- taint
 
 	if not self.isSelected then
 		self.parent:SetMovable(true)
@@ -344,7 +343,8 @@ do -- deal with hooks and events
 	-- unselect our selections whenever a system is selected and try to add an extension
 	hooksecurefunc(EditModeManagerFrame, 'SelectSystem', function(_, systemFrame)
 		if lib.hookVersion == MINOR then
-			EventRegistry:TriggerEvent('EditModeExternal.hideDialog')
+			resetDialogs()
+			resetSelection()
 
 			if internal.dialog then
 				internal.dialog:Reset() -- can this be moved to resetDialogs ?
