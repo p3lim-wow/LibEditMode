@@ -344,11 +344,10 @@ do -- deal with hooks and events
 	-- unselect our selections whenever a system is selected and try to add an extension
 	hooksecurefunc(EditModeManagerFrame, 'SelectSystem', function(_, systemFrame)
 		if lib.hookVersion == MINOR then
-			resetDialogs()
-			resetSelection()
+			EventRegistry:TriggerEvent('EditModeExternal.hideDialog')
 
 			if internal.dialog then
-				internal.dialog:Reset()
+				internal.dialog:Reset() -- can this be moved to resetDialogs ?
 			end
 
 			local systemID = systemFrame.system
@@ -367,6 +366,12 @@ do -- deal with hooks and events
 		end
 	end)
 end
+
+-- custom global callback hook that all addons that add custom dialogs should respond to
+EventRegistry:RegisterCallback('EditModeExternal.hideDialog', function()
+	resetDialogs()
+	resetSelection()
+end)
 
 --[[ LibEditMode:AddFrame(_frame, callback, default_) ![](https://img.shields.io/badge/function-blue)
 Register a frame to be controlled by the Edit Mode.
