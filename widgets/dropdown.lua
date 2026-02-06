@@ -54,7 +54,12 @@ function dropdownMixin:Setup(data)
 				rootDescription:SetScrollMode(data.height)
 			end
 
-			for _, value in next, data.values do
+			local values = data.values
+			if type(values) == 'function' then
+				values = values()
+			end
+
+			for _, value in next, values do
 				if data.multiple then
 					rootDescription:CreateCheckbox(value.text, get, set, {
 						get = data.get,

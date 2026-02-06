@@ -809,12 +809,12 @@ Depending on the setting type there are additional required and optional entries
 
 ### Dropdown ![](https://img.shields.io/badge/object-teal)
 
-| key       | value                                                                                                                 | type     | required |
-|:----------|:----------------------------------------------------------------------------------------------------------------------|:---------|:---------|
-| values    | indexed table containing [DropdownOption](#dropdownoption)s                                                           | table    | no       |
-| multiple  | whether the dropdown should allow selecing multiple options                                                           | boolean  | no       |
-| generator | [Dropdown `SetupMenu` "generator" (callback)](https://warcraft.wiki.gg/wiki/Patch_11.0.0/API_changes#New_menu_system) | function | no       |
-| height    | max height of the menu                                                                                                | integer  | no       |
+| key       | value                                                                                                                 | type           | required |
+|:----------|:----------------------------------------------------------------------------------------------------------------------|:---------------|:---------|
+| values    | indexed table containing [DropdownOption](#dropdownoption)s or a function that returns a compatible table             | table/function | no       |
+| multiple  | whether the dropdown should allow selecing multiple options                                                           | boolean        | no       |
+| generator | [Dropdown `SetupMenu` "generator" (callback)](https://warcraft.wiki.gg/wiki/Patch_11.0.0/API_changes#New_menu_system) | function       | no       |
+| height    | max height of the menu                                                                                                | integer        | no       |
 
 - Either `values` or `generator` is required, the former for simple menues and the latter for complex ones.
     - They are not exclusive, but `generator` takes precedence (e.g. `values` will be available but not used).
