@@ -33,7 +33,9 @@ function dialogMixin:RefreshWidgets()
 		end
 	end
 
-	self:Layout()
+	if self:IsShown() then
+		self:Layout()
+	end
 end
 
 function dialogMixin:UpdateSettings()

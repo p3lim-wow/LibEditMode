@@ -36,7 +36,9 @@ function extensionMixin:RefreshWidgets()
 		end
 	end
 
-	self:Layout()
+	if self:IsShown() then
+		self:Layout()
+	end
 end
 
 function extensionMixin:UpdateSettings()
