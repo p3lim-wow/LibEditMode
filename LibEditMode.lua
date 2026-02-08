@@ -1,8 +1,15 @@
 local MINOR = 14
-local lib = LibStub:NewLibrary('LibEditMode', MINOR)
-if not lib then
-	-- this or a newer version is already loaded
-	return
+
+local _, ns = ...
+local lib
+if ns.LibEditMode then
+	lib = ns.LibEditMode
+else
+	lib = LibStub:NewLibrary('LibEditMode', MINOR)
+	if not lib then
+		-- this or a newer version is already loaded
+		return
+	end
 end
 
 lib.internal = {} -- internal methods, do not use directly

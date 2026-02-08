@@ -1,7 +1,13 @@
-local MINOR = 14
-local lib, minor = LibStub('LibEditMode')
-if minor > MINOR then
-	return
+local _, ns = ...
+local lib
+if ns.LibEditMode then
+	lib = ns.LibEditMode
+else
+	local MINOR, prevMinor = 14
+	lib, prevMinor = LibStub('LibEditMode')
+	if prevMinor > MINOR then
+		return
+	end
 end
 
 local function showTooltip(self)
