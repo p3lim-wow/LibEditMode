@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone project
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Clone wiki
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: ${{ github.repository }}.wiki
           path: .wiki
