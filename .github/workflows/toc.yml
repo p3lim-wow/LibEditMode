@@ -19,7 +19,9 @@ jobs:
           ptr: true
           flavor: |
             retail
-            tbc
+            forever
+            anniversary
+            classic
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
