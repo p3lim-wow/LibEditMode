@@ -1,4 +1,4 @@
-local MINOR = 17
+local MINOR = 18
 
 local _, ns = ...
 local lib
