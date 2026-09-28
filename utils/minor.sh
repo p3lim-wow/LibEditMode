@@ -17,7 +17,7 @@ fi
 echo
 while read -r file; do
   if grep 'local MINOR = ' "$file" >/dev/null; then
-    sed -Ei "s/^local MINOR = [0-9]+\$/local MINOR = ${MINOR}/" "$file"
+    sed -Ei "s/local MINOR = [0-9]+\$/local MINOR = ${MINOR}/" "$file"
     echo "updated $file"
   fi
 done < <(find . -name '*.lua')
