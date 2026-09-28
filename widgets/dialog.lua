@@ -3,7 +3,8 @@ local lib
 if ns.LibEditMode then
 	lib = ns.LibEditMode
 else
-	local MINOR, prevMinor = 15
+	local MINOR = 15
+	local prevMinor
 	lib, prevMinor = LibStub('LibEditMode')
 	if prevMinor > MINOR then
 		return
