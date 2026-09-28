@@ -4,6 +4,7 @@
 ## Title: Lib: EditMode
 ## Notes: Library that allows easy frame integration with Edit Mode
 ## OptionalDeps: LibStub
+## AllowLoadGameType: standard, camelot, mists, tbc
 
 ## X-Curse-Project-ID: 699702
 ## X-WoWI-ID: 26456
