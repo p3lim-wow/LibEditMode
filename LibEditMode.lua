@@ -39,16 +39,26 @@ lib.subSystemButtons = lib.subSystemButtons or {}
 
 lib.layoutCache = lib.layoutCache or {}
 
-local numBaseLayouts = _G.EDIT_MODE_GAMEPAD_SYSTEM_MAP and 3 or 2
-local layoutNames = setmetatable({'Modern', 'Classic'}, {
+local baseLayoutNames = {}
+for _, mapName in next, {
+	{'EDIT_MODE_MODERN_SYSTEM_MAP', 'Modern'},
+	{'EDIT_MODE_CLASSIC_SYSTEM_MAP', 'Classic'},
+	{'EDIT_MODE_GAMEPAD_SYSTEM_MAP', 'Gamepad'},
+} do
+	if _G[mapName[1]] then
+		table.insert(baseLayoutNames, mapName[2])
+	end
+end
+
+local layoutNames = setmetatable(baseLayoutNames, {
 	__index = function(t, key)
-		if key > numBaseLayouts then
-			-- the first 2 indices are reserved for 'Modern' and 'Classic' layouts, and anything
-			-- else are custom ones, although GetLayouts() doesn't return data for the 'Modern'
-			-- and 'Classic' layouts, so we'll have to substract and check
+		if key > #baseLayoutNames then
+			-- the first indices are reserved for base layouts, and anything else are user-created,
+			-- although GetLayouts() doesn't return data for the base layouts, so we'll have to
+			-- substract and check
 			local layouts = lib.layoutCache
-			if (key - 2) <= #layouts then
-				return layouts[key - numBaseLayouts].layoutName
+			if (key - #baseLayoutNames) <= #layouts then
+				return layouts[key - #baseLayoutNames].layoutName
 			end
 		else
 			-- also work for 'Modern' and 'Classic'
@@ -294,7 +304,7 @@ local function onEditModeLayoutChanged()
 					securecallfunction(callback, lib.layoutCache[index].layoutName, layout.layoutName, index)
 				end
 
-				if index == (lib.activeLayout - 2) then
+				if index == (lib.activeLayout - #baseLayoutNames) then
 					-- the currently active layout was renamed, we trigger a layout update
 					lib.activeLayout = nil
 					onEditModeChanged(nil, layoutInfo)
