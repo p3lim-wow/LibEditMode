@@ -39,15 +39,16 @@ lib.subSystemButtons = lib.subSystemButtons or {}
 
 lib.layoutCache = lib.layoutCache or {}
 
+local numBaseLayouts = _G.EDIT_MODE_GAMEPAD_SYSTEM_MAP and 3 or 2
 local layoutNames = setmetatable({'Modern', 'Classic'}, {
 	__index = function(t, key)
-		if key > 2 then
+		if key > numBaseLayouts then
 			-- the first 2 indices are reserved for 'Modern' and 'Classic' layouts, and anything
 			-- else are custom ones, although GetLayouts() doesn't return data for the 'Modern'
 			-- and 'Classic' layouts, so we'll have to substract and check
 			local layouts = lib.layoutCache
 			if (key - 2) <= #layouts then
-				return layouts[key - 2].layoutName
+				return layouts[key - numBaseLayouts].layoutName
 			end
 		else
 			-- also work for 'Modern' and 'Classic'
