@@ -1,4 +1,4 @@
-## Interface: 120100, 120105, 16001, 20506, 50504
+## Interface: 120105, 120107, 16001, 20506, 50504
 ## Author: p3lim
 ## Version: @project-version@
 ## Title: Lib: EditMode
