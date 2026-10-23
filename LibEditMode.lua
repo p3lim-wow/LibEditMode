@@ -70,6 +70,7 @@ local layoutNames = setmetatable(baseLayoutNames, {
 local function resetDialogs()
 	if internal.dialog then
 		internal.dialog:Hide()
+		internal.coords:Hide()
 	end
 
 	if internal.extension then
@@ -167,6 +168,7 @@ local function updatePosition(selection, xDelta, yDelta)
 
 	if selection.isSelected then
 		internal.dialog:Update(selection)
+		internal.coords:Update(selection, point, x, y)
 	end
 end
 
@@ -200,9 +202,11 @@ local function onMouseDown(self) -- replacement for EditModeSystemMixin:SelectSy
 
 		if internal.dialog.selection ~= self then
 			internal.dialog:Reset()
+			internal.dialog:Reset()
 		end
 
 		internal.dialog:Update(self)
+		internal.coords:Update(self)
 	end
 end
 
@@ -244,6 +248,7 @@ local function onEditModeChanged(_, layoutInfo)
 		-- update dialog
 		if internal.dialog and internal.dialog.selection then
 			internal.dialog:Update(internal.dialog.selection)
+			internal.coords:Update(internal.dialog.selection)
 		end
 
 		-- TODO: we should update the position of the button here, let the user not deal with that
@@ -366,6 +371,7 @@ do -- deal with hooks and events
 
 			if internal.dialog then
 				internal.dialog:Reset() -- can this be moved to resetDialogs ?
+				internal.coords:Reset()
 			end
 
 			local systemID = systemFrame.system
@@ -429,7 +435,11 @@ function lib:AddFrame(frame, callback, default, name)
 		internal.dialog = internal:CreateDialog()
 		internal.dialog:HookScript('OnHide', function()
 			resetSelection()
+
+			internal.coords:Hide()
 		end)
+
+		internal.coords = internal:CreateCoords()
 
 		-- fetch layout info in case EDIT_MODE_LAYOUTS_UPDATED already fired
 		if lib.layoutCache then
@@ -784,6 +794,18 @@ end
 
 function internal:MoveParent(selection, x, y)
 	updatePosition(selection, x, y)
+end
+
+function internal:MoveParentToPoint(selection, point, x, y)
+	selection.parent:ClearAllPoints()
+	selection.parent:SetPoint(point, x, y)
+
+	-- actually recalculate and update the point
+	updatePosition(selection)
+end
+
+function internal:CalculateParentPosition(selection)
+	return normalizePosition(selection.parent)
 end
 
 function internal:GetSystemSettings(systemID, subSystemID)

@@ -48,6 +48,7 @@ read_globals = {
 	'WHITE_FONT_COLOR',
 
 	-- GlobalStrings
+	'HEADER_COLON',
 	'HUD_EDIT_MODE_RESET_POSITION',
 	'RESET_TO_DEFAULT',
 
@@ -59,6 +60,7 @@ read_globals = {
 	'CreateFrame',
 	'GetBuildInfo',
 	'InCombatLockdown',
+	'IsAltKeyDown',
 	'IsShiftKeyDown',
 	'PlaySound',
 	'hooksecurefunc',
