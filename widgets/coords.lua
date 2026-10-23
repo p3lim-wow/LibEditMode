@@ -16,7 +16,7 @@ local internal = lib.internal
 local coordsMixin = {}
 
 function coordsMixin:Update(selection, point, x, y)
-	if not point then
+	if not point or not x or not y then
 		point, x, y = internal:CalculateParentPosition(selection)
 	end
 
