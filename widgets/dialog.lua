@@ -137,11 +137,9 @@ function dialogMixin:ResetPosition()
 		pos = CopyTable(CENTER)
 	end
 
-	parent:ClearAllPoints()
-	parent:SetPoint(pos.point, pos.x, pos.y)
-	self.Buttons.ResetPositionButton:SetEnabled(false)
+	internal:MoveParentToPoint(self.selection, pos.point, pos.x, pos.y)
 
-	internal:TriggerCallback(parent, pos.point, pos.x, pos.y)
+	self.Buttons.ResetPositionButton:SetEnabled(false)
 end
 
 function internal:CreateDialog()
