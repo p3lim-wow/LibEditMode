@@ -168,7 +168,7 @@ local function updatePosition(selection, xDelta, yDelta)
 
 	if selection.isSelected then
 		internal.dialog:Update(selection)
-		internal.coords:Update(selection, p, x, y)
+		internal.coords:Update(selection, point, x, y)
 	end
 end
 
