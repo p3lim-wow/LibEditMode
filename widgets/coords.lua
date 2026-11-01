@@ -111,10 +111,9 @@ local function onEditReset(self)
 	self:ClearFocus()
 end
 
-function internal:CreateCoords()
-	local coords = Mixin(CreateFrame('Frame', nil, UIParent), coordsMixin)
+function internal:CreateCoords(parent)
+	local coords = Mixin(CreateFrame('Frame', nil, parent), coordsMixin)
 	coords:SetSize(256, 72)
-	coords:SetPoint('BOTTOM', internal.dialog, 'TOP', 0, 8)
 	coords:SetFrameStrata('DIALOG')
 	coords:SetFrameLevel(300)
 	coords:EnableMouse(true)

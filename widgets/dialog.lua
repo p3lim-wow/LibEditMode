@@ -21,9 +21,10 @@ local internal = lib.internal
 
 -- replica of EditModeSystemSettingsDialog
 local dialogMixin = {}
-function dialogMixin:Update(selection)
+function dialogMixin:Update(selection, point, x, y)
 	self.selection = selection
 
+	self.Coords:Update(selection, point, x, y)
 	self.Title:SetText(selection.system:GetSystemName())
 	self:UpdateSettings()
 	self:UpdateButtons()
@@ -71,6 +72,7 @@ end
 
 function dialogMixin:Reset()
 	self.selection = nil
+	self.Coords:Reset()
 	self:ClearAllPoints()
 	self:SetPoint('BOTTOMRIGHT', UIParent, -250, 250)
 end
@@ -151,8 +153,6 @@ function internal:CreateDialog()
 	dialog.widthPadding = 40
 	dialog.heightPadding = 40
 
-	dialog:Reset()
-
 	-- make draggable
 	dialog:EnableMouse(true)
 	dialog:SetMovable(true)
@@ -197,6 +197,12 @@ function internal:CreateDialog()
 	dialogButtons:SetPoint('TOP', dialogSettings, 'BOTTOM', 0, -12)
 	dialogButtons.spacing = 2
 	dialog.Buttons = dialogButtons
+
+	local coords = self:CreateCoords(dialog)
+	coords:SetPoint('BOTTOM', dialog, 'TOP', 0, 8)
+	dialog.Coords = coords
+
+	dialog:Reset()
 
 	return dialog
 end
