@@ -200,6 +200,7 @@ function internal:CreateDialog()
 
 	local coords = self:CreateCoords(dialog)
 	coords:SetPoint('BOTTOM', dialog, 'TOP', 0, 8)
+	coords.ignoreInLayout = true
 	dialog.Coords = coords
 
 	dialog:Reset()
