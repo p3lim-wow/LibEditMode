@@ -21,9 +21,10 @@ local internal = lib.internal
 
 -- replica of EditModeSystemSettingsDialog
 local dialogMixin = {}
-function dialogMixin:Update(selection)
+function dialogMixin:Update(selection, point, x, y)
 	self.selection = selection
 
+	self.Coords:Update(selection, point, x, y)
 	self.Title:SetText(selection.system:GetSystemName())
 	self:UpdateSettings()
 	self:UpdateButtons()
@@ -71,6 +72,7 @@ end
 
 function dialogMixin:Reset()
 	self.selection = nil
+	self.Coords:Reset()
 	self:ClearAllPoints()
 	self:SetPoint('BOTTOMRIGHT', UIParent, -250, 250)
 end
@@ -137,38 +139,9 @@ function dialogMixin:ResetPosition()
 		pos = CopyTable(CENTER)
 	end
 
-	parent:ClearAllPoints()
-	parent:SetPoint(pos.point, pos.x, pos.y)
+	internal:MoveParentToPoint(self.selection, pos.point, pos.x, pos.y)
+
 	self.Buttons.ResetPositionButton:SetEnabled(false)
-
-	internal:TriggerCallback(parent, pos.point, pos.x, pos.y)
-end
-
-local BIG_STEP = 10
-local SMALL_STEP = 1
-
-function dialogMixin:OnKeyDown(key)
-	if InCombatLockdown() then
-		return
-	end
-
-	if self.selection then
-		self:SetPropagateKeyboardInput(false) -- protected
-
-		if key == 'LEFT' then
-			internal:MoveParent(self.selection, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
-		elseif key == 'RIGHT' then
-			internal:MoveParent(self.selection, IsShiftKeyDown() and BIG_STEP or SMALL_STEP)
-		elseif key == 'UP' then
-			internal:MoveParent(self.selection, 0, IsShiftKeyDown() and BIG_STEP or SMALL_STEP)
-		elseif key == 'DOWN' then
-			internal:MoveParent(self.selection, 0, IsShiftKeyDown() and -BIG_STEP or -SMALL_STEP)
-		else
-			self:SetPropagateKeyboardInput(true) -- protected
-		end
-	else
-		self:SetPropagateKeyboardInput(true) -- protected
-	end
 end
 
 function internal:CreateDialog()
@@ -180,8 +153,6 @@ function internal:CreateDialog()
 	dialog.widthPadding = 40
 	dialog.heightPadding = 40
 
-	dialog:Reset()
-
 	-- make draggable
 	dialog:EnableMouse(true)
 	dialog:SetMovable(true)
@@ -190,7 +161,6 @@ function internal:CreateDialog()
 	dialog:RegisterForDrag('LeftButton')
 	dialog:SetScript('OnDragStart', dialog.StartMoving)
 	dialog:SetScript('OnDragStop', dialog.StopMovingOrSizing)
-	dialog:SetScript('OnKeyDown', dialog.OnKeyDown)
 
 	local dialogTitle = dialog:CreateFontString(nil, nil, 'GameFontHighlightLarge')
 	dialogTitle:SetPoint('TOP', 0, -15)
@@ -227,6 +197,13 @@ function internal:CreateDialog()
 	dialogButtons:SetPoint('TOP', dialogSettings, 'BOTTOM', 0, -12)
 	dialogButtons.spacing = 2
 	dialog.Buttons = dialogButtons
+
+	local coords = self:CreateCoords(dialog)
+	coords:SetPoint('BOTTOM', dialog, 'TOP', 0, 8)
+	coords.ignoreInLayout = true
+	dialog.Coords = coords
+
+	dialog:Reset()
 
 	return dialog
 end
